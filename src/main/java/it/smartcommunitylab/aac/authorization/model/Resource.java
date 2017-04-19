@@ -11,7 +11,6 @@ public class Resource {
 	private List<NodeValue> values;
 
 	public Resource(String qnameRef, List<NodeValue> values) {
-		super();
 		this.qnameRef = qnameRef;
 		this.values = new ArrayList<>(values);
 	}
@@ -21,7 +20,12 @@ public class Resource {
 	}
 
 	private boolean checkLogicalEquivalence(List<NodeParameter> s1, List<? extends NodeParameter> s2) {
-		return false;
+		for (NodeParameter np : s2) {
+			if (!s1.contains(new NodeParameter(np.getQname(), np.getName()))) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public String getQnameRef() {
