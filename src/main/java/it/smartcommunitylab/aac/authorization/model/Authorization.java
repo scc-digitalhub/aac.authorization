@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Authorization {
+	private String id;
 	private String subject;
 	private String action;
 	private Resource resource;
@@ -14,6 +15,18 @@ public class Authorization {
 		this.action = action;
 		this.resource = resource;
 		this.entity = entity;
+	}
+
+	public Authorization(String id, String subject, String action, Resource resource, AuthUser entity) {
+		this.id = id;
+		this.subject = subject;
+		this.action = action;
+		this.resource = resource;
+		this.entity = entity;
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	public String getSubject() {

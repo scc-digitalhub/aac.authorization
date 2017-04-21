@@ -1,10 +1,13 @@
 package it.smartcommunitylab.aac.authorization;
 
+import org.springframework.stereotype.Service;
+
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 
+@Service
 public interface AuthStorage {
 
-	public void insert(Authorization auth);
+	public Authorization insert(Authorization auth);
 
 	public void remove(Authorization auth);
 
