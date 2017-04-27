@@ -7,11 +7,12 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
+import it.smartcommunitylab.aac.authorization.model.AuthSchema;
 import it.smartcommunitylab.aac.authorization.model.Node;
 import it.smartcommunitylab.aac.authorization.model.NodeAlreadyExist;
-import it.smartcommunitylab.aac.authorization.model.AuthSchema;
 
 public class AuthSchemaTest {
+
 
 	@Test
 	public void allChildren() throws NodeAlreadyExist {
@@ -31,5 +32,14 @@ public class AuthSchemaTest {
 
 		Set<Node> result = new HashSet<>(Arrays.asList(node2, node3, node4, node5));
 		Assert.assertEquals(result, p.getAllChildren(node1));
+	}
+
+	@Test
+	public void addChild() throws NodeAlreadyExist {
+		AuthSchema authSchema = new AuthSchema();
+		Node node = new Node("A");
+		Assert.assertNull(authSchema.getNode("A"));
+		authSchema.addChild(node);
+		Assert.assertNotNull(authSchema.getNode("A"));
 	}
 }

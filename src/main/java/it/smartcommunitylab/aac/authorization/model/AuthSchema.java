@@ -39,10 +39,10 @@ public class AuthSchema {
 	 * 
 	 * @param child
 	 * @return
+	 * @throws NodeAlreadyExist
 	 */
-	public AuthSchema addChild(Node child) {
-		root.addNode(child);
-		return this;
+	public AuthSchema addChild(Node child) throws NodeAlreadyExist {
+		return addChild(root, child);
 	}
 
 	public boolean isValid(Resource res) {
