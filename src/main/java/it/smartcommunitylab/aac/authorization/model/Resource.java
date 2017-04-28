@@ -19,9 +19,9 @@ public class Resource {
 		return qnameRef.equals(node.getQname()) && checkLogicalEquivalence(node.getParameters(), values);
 	}
 
-	private boolean checkLogicalEquivalence(List<NodeParameter> s1, List<? extends NodeParameter> s2) {
-		for (NodeParameter np : s2) {
-			if (!s1.contains(new NodeParameter(np.getQname(), np.getName()))) {
+	private boolean checkLogicalEquivalence(List<NodeParameter> s1, List<NodeValue> s2) {
+		for (NodeValue nv : s2) {
+			if (!s1.contains(nv.getDefinition())) {
 				return false;
 			}
 		}

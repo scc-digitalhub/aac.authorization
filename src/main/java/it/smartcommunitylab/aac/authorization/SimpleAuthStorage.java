@@ -62,7 +62,7 @@ public class SimpleAuthStorage implements AuthStorage {
 	}
 
 	public NodeValue createNodeValueAll(NodeValue value) {
-		return new NodeValue(value.getQname(), value.getName(), NodeValue.ALL_VALUE);
+		return new NodeValue(value.getDefinition().getQname(), value.getDefinition().getName(), NodeValue.ALL_VALUE);
 	}
 
 }

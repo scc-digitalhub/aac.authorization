@@ -15,8 +15,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import it.smartcommunitylab.aac.authorization.config.MongoConfig;
+import it.smartcommunitylab.aac.authorization.model.AuthSchema;
 import it.smartcommunitylab.aac.authorization.model.AuthUser;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
+import it.smartcommunitylab.aac.authorization.model.Node;
+import it.smartcommunitylab.aac.authorization.model.NodeAlreadyExist;
 import it.smartcommunitylab.aac.authorization.model.NodeValue;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 import it.smartcommunitylab.aac.authorization.mongo.MongoAuthStorage;
@@ -127,6 +130,21 @@ public class MongoAuthStorageTest {
 		Assert.assertTrue(storage.search(authToFind));
 
 	}
+
+	@Test
+	public void searchForAChildAuthorization() {
+		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", NodeValue.ALL_VALUE)));
+		AuthUser entity = new AuthUser("e1", "type1");
+		Authorization auth1 = new Authorization("subject", "action", res, entity);
+		storage.insert(auth1);
+
+		Resource res1 = new Resource("E", Arrays.asList(new NodeValue("A", "a", "a_value"),
+				new NodeValue("C", "c", "c_value"), new NodeValue("E", "e", "e_value")));
+		AuthUser entity1 = new AuthUser("e1", "type1");
+		Authorization authToFind = new Authorization("subject", "action", res1, entity1);
+
+		Assert.assertTrue(storage.search(authToFind));
+	}
 }
 
 class TestAppConfig {
@@ -134,5 +152,35 @@ class TestAppConfig {
 	@Bean
 	public AuthStorage authStorage() {
 		return new MongoAuthStorage();
+	}
+
+	/*
+	 * 
+	 * A (a) -- B (a b)
+	 * 		 -- C (a c) -- D ( a c d)
+	 * 		            -- E ( a c e)
+	 *  		     
+	 */
+
+	@Bean
+	public AuthSchema authSchema() {
+		AuthSchema schema = new AuthSchema();
+		Node node = new Node("A", Arrays.asList("a"));
+
+		Node nodeB = new Node("B", Arrays.asList("b"));
+		Node nodeC = new Node("C", Arrays.asList("c"));
+		Node nodeD = new Node("D", Arrays.asList("d"));
+		Node nodeE = new Node("E", Arrays.asList("e"));
+
+		try {
+			schema.addChild(node);
+			schema.addChild(node, nodeC);
+			schema.addChild(nodeC, nodeD);
+			schema.addChild(nodeC, nodeE);
+			schema.addChild(node, nodeB);
+		} catch (NodeAlreadyExist e) {
+			e.printStackTrace();
+		}
+		return schema;
 	}
 }

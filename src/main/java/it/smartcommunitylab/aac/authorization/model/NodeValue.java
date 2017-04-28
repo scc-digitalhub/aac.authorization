@@ -3,18 +3,23 @@ package it.smartcommunitylab.aac.authorization.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class NodeValue extends NodeParameter {
+public class NodeValue {
+	private NodeParameter definition;
 	private String value;
 
 	public static final String ALL_VALUE = "*";
 
 	public NodeValue(String qname, String name, String value) {
-		super(qname, name);
+		definition = new NodeParameter(qname, name);
 		this.value = value;
 	}
 
 	public String getValue() {
 		return value;
+	}
+
+	public final NodeParameter getDefinition() {
+		return definition;
 	}
 
 	@Override
@@ -29,12 +34,12 @@ public class NodeValue extends NodeParameter {
 			return false;
 		}
 		NodeValue rhs = (NodeValue) obj;
-		return new EqualsBuilder().appendSuper(true).append(value, rhs.value).isEquals();
+		return new EqualsBuilder().append(definition, rhs.definition).append(value, rhs.value).isEquals();
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(11, 13).appendSuper(super.hashCode()).append(value).hashCode();
+		return new HashCodeBuilder(11, 13).append(definition).append(value).hashCode();
 	}
 
 }

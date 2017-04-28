@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import it.smartcommunitylab.aac.authorization.model.NodeValue;
@@ -31,6 +32,12 @@ class ResourceDocument {
 		}
 	}
 
+	@PersistenceConstructor
+	private ResourceDocument(String qname, Map<String, String> attributes) {
+		this.qname = qname;
+		this.attributes = attributes;
+	}
+
 	interface AttributeDocument {
 		String getName();
 
@@ -43,7 +50,7 @@ class ResourceDocument {
 
 	public void addAllAttributes(Collection<NodeValue> attributes) {
 		for (NodeValue attr : attributes) {
-			addAttribute(getAttrName(attr.getQname(), attr.getName()), attr.getValue());
+			addAttribute(getAttrName(attr.getDefinition().getQname(), attr.getDefinition().getName()), attr.getValue());
 		}
 	}
 
