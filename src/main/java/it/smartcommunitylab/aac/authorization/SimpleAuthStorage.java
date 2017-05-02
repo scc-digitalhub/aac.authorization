@@ -13,9 +13,9 @@ public class SimpleAuthStorage implements AuthStorage {
 
 	private Map<Authorization, int[]> storage = new HashMap<>();
 
-	private IAuthSchema schema;
+	private AuthSchemaHelper schema;
 
-	public SimpleAuthStorage(IAuthSchema schema) {
+	public SimpleAuthStorage(AuthSchemaHelper schema) {
 		this.schema = schema;
 	}
 

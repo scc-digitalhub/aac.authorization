@@ -28,10 +28,10 @@ import it.smartcommunitylab.aac.authorization.mongo.MongoAuthStorage;
 @ContextConfiguration(classes = { MongoConfig.class,
 		MongoAuthSchemaConfig.class }, loader = AnnotationConfigContextLoader.class)
 @TestPropertySource(properties = { "mongo.dbname=aac-authorization-db-test" })
-public class MongoAuthSchemaTest {
+public class MongoAuthSchemaHelperTest {
 
 	@Autowired
-	private IAuthSchema authSchema;
+	private AuthSchemaHelper authSchema;
 
 	@Autowired
 	private MongoTemplate mongo;
@@ -127,8 +127,8 @@ class MongoAuthSchemaConfig {
 	}
 
 	@Bean
-	public IAuthSchema authSchema() {
-		return new MongoAuthSchema();
+	public AuthSchemaHelper authSchema() {
+		return new MongoAuthSchemaHelper();
 	}
 
 }

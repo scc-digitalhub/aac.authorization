@@ -6,7 +6,7 @@ import it.smartcommunitylab.aac.authorization.model.Node;
 import it.smartcommunitylab.aac.authorization.model.NodeAlreadyExist;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
-public interface IAuthSchema {
+public interface AuthSchemaHelper {
 
 	/**
 	 * Add a child to given {@link Node}
@@ -16,7 +16,7 @@ public interface IAuthSchema {
 	 * @return
 	 * @throws NodeAlreadyExist
 	 */
-	IAuthSchema addChild(Node parent, Node child) throws NodeAlreadyExist;
+	AuthSchemaHelper addChild(Node parent, Node child) throws NodeAlreadyExist;
 
 	/**
 	 * Add a child to root node
@@ -25,7 +25,7 @@ public interface IAuthSchema {
 	 * @return
 	 * @throws NodeAlreadyExist
 	 */
-	IAuthSchema addRootChild(Node child) throws NodeAlreadyExist;
+	AuthSchemaHelper addRootChild(Node child) throws NodeAlreadyExist;
 
 	boolean isValid(Resource res);
 

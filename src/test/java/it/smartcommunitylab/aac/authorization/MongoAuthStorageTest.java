@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import it.smartcommunitylab.aac.authorization.config.MongoConfig;
-import it.smartcommunitylab.aac.authorization.model.AuthSchema;
 import it.smartcommunitylab.aac.authorization.model.AuthUser;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.Node;
@@ -163,8 +162,8 @@ class TestAppConfig {
 	 */
 
 	@Bean
-	public IAuthSchema authSchema() {
-		IAuthSchema schema = new AuthSchema();
+	public AuthSchemaHelper authSchema() {
+		AuthSchemaHelper schema = new SimpleAuthSchemaHelper();
 		Node node = new Node("A");
 		node.addParameter("a");
 

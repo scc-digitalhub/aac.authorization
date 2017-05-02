@@ -5,7 +5,6 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 
-import it.smartcommunitylab.aac.authorization.model.AuthSchema;
 import it.smartcommunitylab.aac.authorization.model.AuthUser;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.NodeValue;
@@ -15,7 +14,7 @@ public class SimpleAuthStorageTest {
 
 	@Test
 	public void insertFirstAuthorization() {
-		AuthStorage storage = new SimpleAuthStorage(new AuthSchema());
+		AuthStorage storage = new SimpleAuthStorage(new SimpleAuthSchemaHelper());
 
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
 		AuthUser entity = new AuthUser("e1", "type1");
@@ -30,7 +29,7 @@ public class SimpleAuthStorageTest {
 
 	@Test
 	public void searchNotExistentAuthWithEmptyStorage() {
-		AuthStorage storage = new SimpleAuthStorage(new AuthSchema());
+		AuthStorage storage = new SimpleAuthStorage(new SimpleAuthSchemaHelper());
 
 		Resource res1 = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
 		AuthUser entity1 = new AuthUser("e1", "type1");
@@ -41,7 +40,7 @@ public class SimpleAuthStorageTest {
 
 	@Test
 	public void searchNotExistentAuthWithPopulatedStorage() {
-		AuthStorage storage = new SimpleAuthStorage(new AuthSchema());
+		AuthStorage storage = new SimpleAuthStorage(new SimpleAuthSchemaHelper());
 
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
 		AuthUser entity = new AuthUser("e1", "type1");
@@ -56,7 +55,7 @@ public class SimpleAuthStorageTest {
 
 	@Test
 	public void removePresentAuth() {
-		AuthStorage storage = new SimpleAuthStorage(new AuthSchema());
+		AuthStorage storage = new SimpleAuthStorage(new SimpleAuthSchemaHelper());
 
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
 		AuthUser entity = new AuthUser("e1", "type1");
@@ -70,7 +69,7 @@ public class SimpleAuthStorageTest {
 
 	@Test
 	public void removeNotPresentAuth() {
-		AuthStorage storage = new SimpleAuthStorage(new AuthSchema());
+		AuthStorage storage = new SimpleAuthStorage(new SimpleAuthSchemaHelper());
 
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
 		AuthUser entity = new AuthUser("e1", "type1");
@@ -86,7 +85,7 @@ public class SimpleAuthStorageTest {
 
 	@Test
 	public void searchOnWildcardAuthorization() {
-		AuthStorage storage = new SimpleAuthStorage(new AuthSchema());
+		AuthStorage storage = new SimpleAuthStorage(new SimpleAuthSchemaHelper());
 
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", NodeValue.ALL_VALUE)));
 		AuthUser entity = new AuthUser("e1", "type1");

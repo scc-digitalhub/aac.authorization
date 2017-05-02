@@ -7,7 +7,7 @@ import it.smartcommunitylab.aac.authorization.model.Authorization;
 public class AuthHelper {
 
 	@Autowired
-	private IAuthSchema policy;
+	private AuthSchemaHelper policy;
 
 	@Autowired
 	private AuthStorage storage;

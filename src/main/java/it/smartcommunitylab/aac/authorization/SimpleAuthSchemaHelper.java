@@ -1,4 +1,4 @@
-package it.smartcommunitylab.aac.authorization.model;
+package it.smartcommunitylab.aac.authorization;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,16 +8,18 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import it.smartcommunitylab.aac.authorization.IAuthSchema;
+import it.smartcommunitylab.aac.authorization.model.Node;
+import it.smartcommunitylab.aac.authorization.model.NodeAlreadyExist;
+import it.smartcommunitylab.aac.authorization.model.Resource;
 
-public class AuthSchema implements IAuthSchema {
+public class SimpleAuthSchemaHelper implements AuthSchemaHelper {
 	private Node root;
 
 	private Set<String> nid = new HashSet<>();
 
 	private Map<String, Node> index = new HashMap<>();
 
-	public AuthSchema() {
+	public SimpleAuthSchemaHelper() {
 		root = new Node(Node.ROOT_NODE_ATTRIBUTE);
 	}
 
@@ -30,7 +32,7 @@ public class AuthSchema implements IAuthSchema {
 	 * @throws NodeAlreadyExist
 	 */
 	@Override
-	public IAuthSchema addChild(Node parent, Node child) throws NodeAlreadyExist {
+	public AuthSchemaHelper addChild(Node parent, Node child) throws NodeAlreadyExist {
 		if (!index.containsKey(child.getQname())) {
 			parent = parent.addChild(child);
 			child = child.addParent(parent);
@@ -49,7 +51,7 @@ public class AuthSchema implements IAuthSchema {
 	 * @throws NodeAlreadyExist
 	 */
 	@Override
-	public IAuthSchema addRootChild(Node child) throws NodeAlreadyExist {
+	public AuthSchemaHelper addRootChild(Node child) throws NodeAlreadyExist {
 		return addChild(root, child);
 	}
 

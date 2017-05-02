@@ -7,16 +7,15 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
-import it.smartcommunitylab.aac.authorization.model.AuthSchema;
 import it.smartcommunitylab.aac.authorization.model.Node;
 import it.smartcommunitylab.aac.authorization.model.NodeAlreadyExist;
 
-public class AuthSchemaTest {
+public class AuthSchemaHelperTest {
 
 
 	@Test
 	public void allChildren() throws NodeAlreadyExist {
-		IAuthSchema p = new AuthSchema();
+		AuthSchemaHelper p = new SimpleAuthSchemaHelper();
 		Node node1 = new Node("A");
 		Node node2 = new Node("B");
 		Node node3 = new Node("C");
@@ -36,7 +35,7 @@ public class AuthSchemaTest {
 
 	@Test
 	public void getAllChildren() throws NodeAlreadyExist {
-		IAuthSchema authSchema = new AuthSchema();
+		AuthSchemaHelper authSchema = new SimpleAuthSchemaHelper();
 		Node nodeA = new Node("A");
 		authSchema.addRootChild(nodeA);
 		Node nodeB = new Node("B");
@@ -54,7 +53,7 @@ public class AuthSchemaTest {
 
 	@Test(expected = NodeAlreadyExist.class)
 	public void nodeAlreadyExist() throws NodeAlreadyExist {
-		IAuthSchema authSchema = new AuthSchema();
+		AuthSchemaHelper authSchema = new SimpleAuthSchemaHelper();
 		Node nodeA = new Node("A");
 		authSchema.addRootChild(nodeA);
 		authSchema.addChild(nodeA, nodeA);
@@ -62,7 +61,7 @@ public class AuthSchemaTest {
 
 	@Test
 	public void addRootChild() throws NodeAlreadyExist {
-		IAuthSchema authSchema = new AuthSchema();
+		AuthSchemaHelper authSchema = new SimpleAuthSchemaHelper();
 		Node node = new Node("A");
 		Assert.assertNull(authSchema.getNode("A"));
 		authSchema.addRootChild(node);
@@ -71,7 +70,7 @@ public class AuthSchemaTest {
 
 	@Test
 	public void addSecondLevelChild() throws NodeAlreadyExist {
-		IAuthSchema authSchema = new AuthSchema();
+		AuthSchemaHelper authSchema = new SimpleAuthSchemaHelper();
 		Node nodeA = new Node("A");
 		authSchema.addRootChild(nodeA);
 		Node nodeB = new Node("B");
