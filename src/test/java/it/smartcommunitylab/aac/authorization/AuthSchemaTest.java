@@ -23,8 +23,8 @@ public class AuthSchemaTest {
 		Node node4 = new Node("D");
 		Node node5 = new Node("E");
 		Node node6 = new Node("F");
-		p.addChild(node1);
-		p.addChild(node6);
+		p.addRootChild(node1);
+		p.addRootChild(node6);
 		p.addChild(node1, node2);
 		p.addChild(node2, node3);
 		p.addChild(node2, node4);
@@ -38,7 +38,7 @@ public class AuthSchemaTest {
 	public void getAllChildren() throws NodeAlreadyExist {
 		IAuthSchema authSchema = new AuthSchema();
 		Node nodeA = new Node("A");
-		authSchema.addChild(nodeA);
+		authSchema.addRootChild(nodeA);
 		Node nodeB = new Node("B");
 		authSchema.addChild(nodeA, nodeB);
 
@@ -56,7 +56,7 @@ public class AuthSchemaTest {
 	public void nodeAlreadyExist() throws NodeAlreadyExist {
 		IAuthSchema authSchema = new AuthSchema();
 		Node nodeA = new Node("A");
-		authSchema.addChild(nodeA);
+		authSchema.addRootChild(nodeA);
 		authSchema.addChild(nodeA, nodeA);
 	}
 
@@ -65,7 +65,7 @@ public class AuthSchemaTest {
 		IAuthSchema authSchema = new AuthSchema();
 		Node node = new Node("A");
 		Assert.assertNull(authSchema.getNode("A"));
-		authSchema.addChild(node);
+		authSchema.addRootChild(node);
 		Assert.assertNotNull(authSchema.getNode("A"));
 	}
 
@@ -73,7 +73,7 @@ public class AuthSchemaTest {
 	public void addSecondLevelChild() throws NodeAlreadyExist {
 		IAuthSchema authSchema = new AuthSchema();
 		Node nodeA = new Node("A");
-		authSchema.addChild(nodeA);
+		authSchema.addRootChild(nodeA);
 		Node nodeB = new Node("B");
 		authSchema.addChild(nodeA, nodeB);
 

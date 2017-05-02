@@ -173,7 +173,7 @@ class TestAppConfig {
 		Node nodeE = new Node("E", Arrays.asList("e"));
 
 		try {
-			schema.addChild(node);
+			schema.addRootChild(node);
 			schema.addChild(node, nodeC);
 			schema.addChild(nodeC, nodeD);
 			schema.addChild(nodeC, nodeE);

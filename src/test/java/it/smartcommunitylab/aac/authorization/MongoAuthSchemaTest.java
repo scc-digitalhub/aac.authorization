@@ -45,14 +45,14 @@ public class MongoAuthSchemaTest {
 	public void addRootChild() throws NodeAlreadyExist {
 		Node node = new Node("A");
 		Assert.assertNull(authSchema.getNode("A"));
-		authSchema.addChild(node);
+		authSchema.addRootChild(node);
 		Assert.assertNotNull(authSchema.getNode("A"));
 	}
 
 	@Test
 	public void addSecondLevelChild() throws NodeAlreadyExist {
 		Node nodeA = new Node("A");
-		authSchema.addChild(nodeA);
+		authSchema.addRootChild(nodeA);
 		Node nodeB = new Node("B");
 		authSchema.addChild(nodeA, nodeB);
 
@@ -65,7 +65,7 @@ public class MongoAuthSchemaTest {
 	@Test(expected = NodeAlreadyExist.class)
 	public void nodeAlreadyExist() throws NodeAlreadyExist {
 		Node nodeA = new Node("A");
-		authSchema.addChild(nodeA);
+		authSchema.addRootChild(nodeA);
 		authSchema.addChild(nodeA, nodeA);
 	}
 
@@ -77,8 +77,8 @@ public class MongoAuthSchemaTest {
 		Node nodeD = new Node("D");
 		Node nodeE = new Node("E");
 		Node nodeF = new Node("F");
-		authSchema.addChild(nodeA);
-		authSchema.addChild(nodeF);
+		authSchema.addRootChild(nodeA);
+		authSchema.addRootChild(nodeF);
 		authSchema.addChild(nodeA, nodeB);
 		authSchema.addChild(nodeB, nodeC);
 		authSchema.addChild(nodeB, nodeD);
@@ -91,7 +91,7 @@ public class MongoAuthSchemaTest {
 	@Test
 	public void getAllChildren() throws NodeAlreadyExist {
 		Node nodeA = new Node("A");
-		authSchema.addChild(nodeA);
+		authSchema.addRootChild(nodeA);
 		Node nodeB = new Node("B");
 		authSchema.addChild(nodeA, nodeB);
 

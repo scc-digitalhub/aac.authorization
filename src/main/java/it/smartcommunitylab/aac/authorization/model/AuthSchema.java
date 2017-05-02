@@ -49,7 +49,7 @@ public class AuthSchema implements IAuthSchema {
 	 * @throws NodeAlreadyExist
 	 */
 	@Override
-	public IAuthSchema addChild(Node child) throws NodeAlreadyExist {
+	public IAuthSchema addRootChild(Node child) throws NodeAlreadyExist {
 		return addChild(root, child);
 	}
 

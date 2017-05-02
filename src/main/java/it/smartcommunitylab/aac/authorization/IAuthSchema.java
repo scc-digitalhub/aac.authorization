@@ -25,7 +25,7 @@ public interface IAuthSchema {
 	 * @return
 	 * @throws NodeAlreadyExist
 	 */
-	IAuthSchema addChild(Node child) throws NodeAlreadyExist;
+	IAuthSchema addRootChild(Node child) throws NodeAlreadyExist;
 
 	boolean isValid(Resource res);
 
