@@ -21,7 +21,7 @@ public class Node {
 	private List<NodeParameter> parameters = new ArrayList<>();
 
 	private Set<String> parentNs = new HashSet<>();
-	private Set<String> siblingNs = new HashSet<>();
+	private Set<String> childrenNs = new HashSet<>();
 
 	public Node(String qname) {
 		this.qname = qname;
@@ -42,7 +42,7 @@ public class Node {
 	}
 
 	public Node addChild(Node node) {
-		siblingNs.add(node.getQname());
+		childrenNs.add(node.getQname());
 		return this;
 	}
 
@@ -58,7 +58,7 @@ public class Node {
 	}
 
 	public Set<String> getChildren() {
-		return siblingNs;
+		return childrenNs;
 	}
 
 
