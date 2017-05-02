@@ -21,6 +21,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import it.smartcommunitylab.aac.authorization.config.MongoConfig;
 import it.smartcommunitylab.aac.authorization.model.Node;
 import it.smartcommunitylab.aac.authorization.model.NodeAlreadyExist;
+import it.smartcommunitylab.aac.authorization.model.NodeParameter;
 import it.smartcommunitylab.aac.authorization.mongo.MongoAuthStorage;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -67,6 +68,17 @@ public class MongoAuthSchemaTest {
 		Node nodeA = new Node("A");
 		authSchema.addRootChild(nodeA);
 		authSchema.addChild(nodeA, nodeA);
+	}
+
+	@Test
+	public void nodeWithParameters() throws NodeAlreadyExist {
+		Node nodeA = new Node("A");
+		nodeA.addParameter("a");
+		nodeA.addParameter("n");
+		authSchema.addRootChild(nodeA);
+		Assert.assertEquals(Arrays.asList(new NodeParameter("A", "a"), new NodeParameter("A", "n")),
+				authSchema.getNode("A").getParameters());
+
 	}
 
 	@Test

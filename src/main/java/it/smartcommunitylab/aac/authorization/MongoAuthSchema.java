@@ -52,7 +52,7 @@ public class MongoAuthSchema implements IAuthSchema {
 				throw new NodeAlreadyExist();
 			}
 			Update ops = new Update();
-			ops.set("siblingNs", p.getChildren());
+			ops.set("childrenNs", p.getChildren());
 			mongo.updateFirst(q, ops, Node.class);
 		}
 		return this;

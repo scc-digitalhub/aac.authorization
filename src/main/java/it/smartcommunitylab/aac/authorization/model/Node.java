@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -27,13 +26,19 @@ public class Node {
 		this.qname = qname;
 	}
 
-	@PersistenceConstructor
-	public Node(String qname, final List<String> parameters) {
-		this(qname);
-		this.parameters.addAll(parameters.stream().map(n -> {
-			return new NodeParameter(qname, n);
-		}).collect(Collectors.toList()));
 
+	// public Node(String qname, final List<String> parameters) {
+	// this(qname);
+	// this.parameters.addAll(parameters.stream().map(n -> {
+	// return new NodeParameter(qname, n);
+	// }).collect(Collectors.toList()));
+	//
+	// }
+
+	@PersistenceConstructor
+	private Node(String qname, final List<NodeParameter> parameters) {
+		this(qname);
+		this.parameters.addAll(parameters);
 	}
 
 	public Node(String qname, String parameter) {
@@ -52,6 +57,10 @@ public class Node {
 		return this;
 	}
 
+	public Node addParameter(String param) {
+		parameters.add(new NodeParameter(qname, param));
+		return this;
+	}
 
 	public boolean isRoot() {
 		return ROOT_NODE_ATTRIBUTE.equals(qname);

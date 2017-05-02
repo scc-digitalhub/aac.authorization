@@ -165,12 +165,17 @@ class TestAppConfig {
 	@Bean
 	public IAuthSchema authSchema() {
 		IAuthSchema schema = new AuthSchema();
-		Node node = new Node("A", Arrays.asList("a"));
+		Node node = new Node("A");
+		node.addParameter("a");
 
-		Node nodeB = new Node("B", Arrays.asList("b"));
-		Node nodeC = new Node("C", Arrays.asList("c"));
-		Node nodeD = new Node("D", Arrays.asList("d"));
-		Node nodeE = new Node("E", Arrays.asList("e"));
+		Node nodeB = new Node("B");
+		nodeB.addParameter("b");
+		Node nodeC = new Node("C");
+		nodeC.addParameter("c");
+		Node nodeD = new Node("D");
+		nodeD.addParameter("d");
+		Node nodeE = new Node("E");
+		nodeE.addParameter("e");
 
 		try {
 			schema.addRootChild(node);

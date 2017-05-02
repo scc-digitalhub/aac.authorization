@@ -14,7 +14,8 @@ public class ResourceTest {
 	@Test
 	public void validOneParam() {
 		Resource r = new Resource("a", Arrays.asList(new NodeValue("a", "a1", "a_value")));
-		Node a = new Node("a", Arrays.asList("a1"));
+		Node a = new Node("a");
+		a.addParameter("a1");
 		Assert.assertEquals(true, r.isInstanceOf(a));
 	}
 
@@ -22,7 +23,9 @@ public class ResourceTest {
 	public void validTwoParamSameOrder() {
 		Resource r = new Resource("a",
 				Arrays.asList(new NodeValue("a", "a1", "a_value"), new NodeValue("a", "b1", "b_value")));
-		Node a = new Node("a", Arrays.asList("a1", "b1"));
+		Node a = new Node("a");
+		a.addParameter("a1");
+		a.addParameter("b1");
 		Assert.assertEquals(true, r.isInstanceOf(a));
 	}
 
@@ -30,21 +33,26 @@ public class ResourceTest {
 	public void validTwoParamNotSameOrder() {
 		Resource r = new Resource("a",
 				Arrays.asList(new NodeValue("a", "b1", "b_value"), new NodeValue("a", "a1", "a_value")));
-		Node a = new Node("a", Arrays.asList("a1", "b1"));
+		Node a = new Node("a");
+		a.addParameter("a1");
+		a.addParameter("b1");
 		Assert.assertEquals(true, r.isInstanceOf(a));
 	}
 
 	@Test
 	public void validParamListSubSetThatNodeOne() {
 		Resource r = new Resource("a", Arrays.asList(new NodeValue("a", "b1", "b_value")));
-		Node a = new Node("a", Arrays.asList("a1", "b1"));
+		Node a = new Node("a");
+		a.addParameter("a1");
+		a.addParameter("b1");
 		Assert.assertEquals(true, r.isInstanceOf(a));
 	}
 
 	@Test
 	public void invalidParamNotPresent() {
 		Resource r = new Resource("a", Arrays.asList(new NodeValue("a", "b1", "b_value")));
-		Node a = new Node("a", Arrays.asList("a1"));
+		Node a = new Node("a");
+		a.addParameter("a1");
 		Assert.assertEquals(false, r.isInstanceOf(a));
 	}
 
@@ -52,7 +60,9 @@ public class ResourceTest {
 	public void invalidParamListSuperSetThatNodeOne() {
 		Resource r = new Resource("a",
 				Arrays.asList(new NodeValue("a", "b1", "b_value"), new NodeValue("a", "c1", "c_value")));
-		Node a = new Node("a", Arrays.asList("a1", "b1"));
+		Node a = new Node("a");
+		a.addParameter("a1");
+		a.addParameter("b1");
 		Assert.assertEquals(false, r.isInstanceOf(a));
 	}
 }
