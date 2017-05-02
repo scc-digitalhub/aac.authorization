@@ -163,8 +163,8 @@ class TestAppConfig {
 	 */
 
 	@Bean
-	public AuthSchema authSchema() {
-		AuthSchema schema = new AuthSchema();
+	public IAuthSchema authSchema() {
+		IAuthSchema schema = new AuthSchema();
 		Node node = new Node("A", Arrays.asList("a"));
 
 		Node nodeB = new Node("B", Arrays.asList("b"));

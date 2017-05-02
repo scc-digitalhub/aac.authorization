@@ -16,7 +16,7 @@ public class AuthSchemaTest {
 
 	@Test
 	public void allChildren() throws NodeAlreadyExist {
-		AuthSchema p = new AuthSchema();
+		IAuthSchema p = new AuthSchema();
 		Node node1 = new Node("A");
 		Node node2 = new Node("B");
 		Node node3 = new Node("C");
@@ -36,7 +36,7 @@ public class AuthSchemaTest {
 
 	@Test
 	public void getAllChildren() throws NodeAlreadyExist {
-		AuthSchema authSchema = new AuthSchema();
+		IAuthSchema authSchema = new AuthSchema();
 		Node nodeA = new Node("A");
 		authSchema.addChild(nodeA);
 		Node nodeB = new Node("B");
@@ -54,7 +54,7 @@ public class AuthSchemaTest {
 
 	@Test(expected = NodeAlreadyExist.class)
 	public void nodeAlreadyExist() throws NodeAlreadyExist {
-		AuthSchema authSchema = new AuthSchema();
+		IAuthSchema authSchema = new AuthSchema();
 		Node nodeA = new Node("A");
 		authSchema.addChild(nodeA);
 		authSchema.addChild(nodeA, nodeA);
@@ -62,7 +62,7 @@ public class AuthSchemaTest {
 
 	@Test
 	public void addRootChild() throws NodeAlreadyExist {
-		AuthSchema authSchema = new AuthSchema();
+		IAuthSchema authSchema = new AuthSchema();
 		Node node = new Node("A");
 		Assert.assertNull(authSchema.getNode("A"));
 		authSchema.addChild(node);
@@ -71,7 +71,7 @@ public class AuthSchemaTest {
 
 	@Test
 	public void addSecondLevelChild() throws NodeAlreadyExist {
-		AuthSchema authSchema = new AuthSchema();
+		IAuthSchema authSchema = new AuthSchema();
 		Node nodeA = new Node("A");
 		authSchema.addChild(nodeA);
 		Node nodeB = new Node("B");

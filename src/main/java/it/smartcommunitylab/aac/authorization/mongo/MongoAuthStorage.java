@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import it.smartcommunitylab.aac.authorization.AuthStorage;
-import it.smartcommunitylab.aac.authorization.model.AuthSchema;
+import it.smartcommunitylab.aac.authorization.IAuthSchema;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.Node;
 import it.smartcommunitylab.aac.authorization.model.NodeParameter;
@@ -30,7 +30,7 @@ public class MongoAuthStorage implements AuthStorage {
 	private MongoTemplate mongo;
 
 	@Autowired
-	private AuthSchema authSchema;
+	private IAuthSchema authSchema;
 
 	@Override
 	public Authorization insert(Authorization auth) {

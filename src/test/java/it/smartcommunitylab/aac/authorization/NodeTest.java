@@ -17,7 +17,7 @@ public class NodeTest {
 	public void addNode() {
 		Node parent = new Node("istituto");
 		Node child = new Node("anno");
-		Assert.assertEquals(parent, parent.addNode(child));
+		Assert.assertEquals(parent, parent.addChild(child));
 	}
 
 }

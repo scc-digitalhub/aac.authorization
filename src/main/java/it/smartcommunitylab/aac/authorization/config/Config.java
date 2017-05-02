@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import it.smartcommunitylab.aac.authorization.AuthStorage;
+import it.smartcommunitylab.aac.authorization.IAuthSchema;
 import it.smartcommunitylab.aac.authorization.model.AuthSchema;
 import it.smartcommunitylab.aac.authorization.mongo.MongoAuthStorage;
 
@@ -11,7 +12,7 @@ import it.smartcommunitylab.aac.authorization.mongo.MongoAuthStorage;
 public class Config {
 
 	@Bean
-	public AuthSchema authSchema() {
+	public IAuthSchema authSchema() {
 		return new AuthSchema();
 	}
 

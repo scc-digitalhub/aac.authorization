@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import it.smartcommunitylab.aac.authorization.model.AuthSchema;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.NodeValue;
 import it.smartcommunitylab.aac.authorization.model.Resource;
@@ -14,9 +13,9 @@ public class SimpleAuthStorage implements AuthStorage {
 
 	private Map<Authorization, int[]> storage = new HashMap<>();
 
-	private AuthSchema schema;
+	private IAuthSchema schema;
 
-	public SimpleAuthStorage(AuthSchema schema) {
+	public SimpleAuthStorage(IAuthSchema schema) {
 		this.schema = schema;
 	}
 
