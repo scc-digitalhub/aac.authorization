@@ -10,7 +10,7 @@ import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
 
 @TypeAlias("mainAuthGranted")
-public class MainAuthorizationGranted extends AuthorizationGranted {
+class MainAuthorizationGranted extends AuthorizationGranted {
 
 	private List<String> childAuths = new ArrayList<>();
 
