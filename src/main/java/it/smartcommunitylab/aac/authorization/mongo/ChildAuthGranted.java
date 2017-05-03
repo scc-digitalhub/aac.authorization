@@ -14,7 +14,7 @@ public class ChildAuthGranted extends AuthGranted {
 		super(auth);
 	}
 
-	private ChildAuthGranted(String id, String subject, String action, AuthUser entity, ResourceDocument resource,
+	private ChildAuthGranted(String id, AuthUser subject, String action, AuthUser entity, ResourceDocument resource,
 			String mainAuthGrantedId) {
 		super(id, subject, action, entity, resource);
 		this.mainAuthGrantedId = mainAuthGrantedId;

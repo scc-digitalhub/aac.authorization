@@ -21,7 +21,7 @@ public class MainAuthGranted extends AuthGranted {
 	}
 
 	@PersistenceConstructor
-	private MainAuthGranted(String id, String subject, String action, AuthUser entity, ResourceDocument resource,
+	private MainAuthGranted(String id, AuthUser subject, String action, AuthUser entity, ResourceDocument resource,
 			List<String> childAuths) {
 		super(id, subject, action, entity, resource);
 		this.childAuths = childAuths;

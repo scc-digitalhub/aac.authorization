@@ -8,7 +8,7 @@ import it.smartcommunitylab.aac.authorization.model.Authorization;
 @Document(collection = "authGranted")
 abstract class AuthGranted {
 	private String id;
-	private String subject;
+	private AuthUser subject;
 	private String action;
 	private AuthUser entity;
 	private ResourceDocument resource;
@@ -26,7 +26,7 @@ abstract class AuthGranted {
 	/*
 	 * Constructor used by Spring data to convert mongo dbobject in class instance
 	 */
-	protected AuthGranted(String id, String subject, String action, AuthUser entity, ResourceDocument resource) {
+	protected AuthGranted(String id, AuthUser subject, String action, AuthUser entity, ResourceDocument resource) {
 		this.id = id;
 		this.subject = subject;
 		this.action = action;
@@ -44,7 +44,7 @@ abstract class AuthGranted {
 		return id;
 	}
 
-	public String getSubject() {
+	public AuthUser getSubject() {
 		return subject;
 	}
 

@@ -44,7 +44,8 @@ public class MongoAuthStorageTest {
 	public void saveAuthorization() {
 		Resource r = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
 		AuthUser entity = new AuthUser("id", "type");
-		Authorization auth = new Authorization("sub", "action", r, entity);
+		AuthUser subject = new AuthUser("sub", "type");
+		Authorization auth = new Authorization(subject, "action", r, entity);
 		storage.insert(auth);
 	}
 
@@ -53,12 +54,13 @@ public class MongoAuthStorageTest {
 
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
 		AuthUser entity = new AuthUser("e1", "type1");
-		storage.insert(new Authorization("subject", "action", res, entity));
+		AuthUser subject = new AuthUser("sub", "type");
+		storage.insert(new Authorization(subject, "action", res, entity));
 
 		Resource res1 = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
 		AuthUser entity1 = new AuthUser("e1", "type1");
 
-		Assert.assertEquals(true, storage.search(new Authorization("subject", "action", res1, entity1)));
+		Assert.assertEquals(true, storage.search(new Authorization(subject, "action", res1, entity1)));
 
 	}
 
@@ -67,8 +69,8 @@ public class MongoAuthStorageTest {
 
 		Resource res1 = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
 		AuthUser entity1 = new AuthUser("e1", "type1");
-
-		Assert.assertEquals(false, storage.search(new Authorization("subject", "action", res1, entity1)));
+		AuthUser subject = new AuthUser("sub", "type");
+		Assert.assertEquals(false, storage.search(new Authorization(subject, "action", res1, entity1)));
 
 	}
 
@@ -77,12 +79,13 @@ public class MongoAuthStorageTest {
 
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
 		AuthUser entity = new AuthUser("e1", "type1");
-		storage.insert(new Authorization("subject", "action", res, entity));
+		AuthUser subject = new AuthUser("sub", "type");
+		storage.insert(new Authorization(subject, "action", res, entity));
 
 		Resource res1 = new Resource("B", Arrays.asList(new NodeValue("B", "a", "a_value")));
 		AuthUser entity1 = new AuthUser("e1", "type1");
 
-		Assert.assertEquals(false, storage.search(new Authorization("subject", "action", res1, entity1)));
+		Assert.assertEquals(false, storage.search(new Authorization(subject, "action", res1, entity1)));
 
 	}
 
@@ -91,7 +94,8 @@ public class MongoAuthStorageTest {
 
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
 		AuthUser entity = new AuthUser("e1", "type1");
-		Authorization auth1 = new Authorization("subject", "action", res, entity);
+		AuthUser subject = new AuthUser("sub", "type");
+		Authorization auth1 = new Authorization(subject, "action", res, entity);
 		auth1 = storage.insert(auth1);
 
 		Assert.assertTrue(storage.search(auth1));
@@ -104,10 +108,12 @@ public class MongoAuthStorageTest {
 
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
 		AuthUser entity = new AuthUser("e1", "type1");
-		Authorization auth1 = new Authorization("subject", "action", res, entity);
+		AuthUser subject = new AuthUser("sub", "type");
+		Authorization auth1 = new Authorization(subject, "action", res, entity);
 		storage.insert(auth1);
 
-		Authorization dummy = new Authorization("s2", "action", null, new AuthUser("id2", "type"));
+		Authorization dummy = new Authorization(new AuthUser("dummy", "dummy"), "action", null,
+				new AuthUser("id2", "type"));
 
 		Assert.assertTrue(storage.search(auth1));
 		storage.remove(dummy);
@@ -119,12 +125,13 @@ public class MongoAuthStorageTest {
 
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", NodeValue.ALL_VALUE)));
 		AuthUser entity = new AuthUser("e1", "type1");
-		Authorization auth1 = new Authorization("subject", "action", res, entity);
+		AuthUser subject = new AuthUser("sub", "type");
+		Authorization auth1 = new Authorization(subject, "action", res, entity);
 		storage.insert(auth1);
 
 		Resource res1 = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
 		AuthUser entity1 = new AuthUser("e1", "type1");
-		Authorization authToFind = new Authorization("subject", "action", res1, entity1);
+		Authorization authToFind = new Authorization(subject, "action", res1, entity1);
 
 		Assert.assertTrue(storage.search(authToFind));
 
@@ -134,13 +141,14 @@ public class MongoAuthStorageTest {
 	public void searchForAChildAuthorization() {
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", NodeValue.ALL_VALUE)));
 		AuthUser entity = new AuthUser("e1", "type1");
-		Authorization auth1 = new Authorization("subject", "action", res, entity);
+		AuthUser subject = new AuthUser("sub", "type");
+		Authorization auth1 = new Authorization(subject, "action", res, entity);
 		storage.insert(auth1);
 
 		Resource res1 = new Resource("E", Arrays.asList(new NodeValue("A", "a", "a_value"),
 				new NodeValue("C", "c", "c_value"), new NodeValue("E", "e", "e_value")));
 		AuthUser entity1 = new AuthUser("e1", "type1");
-		Authorization authToFind = new Authorization("subject", "action", res1, entity1);
+		Authorization authToFind = new Authorization(subject, "action", res1, entity1);
 
 		Assert.assertTrue(storage.search(authToFind));
 	}

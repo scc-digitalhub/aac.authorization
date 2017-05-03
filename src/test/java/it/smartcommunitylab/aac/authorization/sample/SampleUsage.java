@@ -39,7 +39,7 @@ public class SampleUsage {
 		AuthHelper authHelper = ctx.getBean(AuthHelper.class);
 		ctx.close();
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_Value")));
-		Authorization auth = new Authorization("sub", "act", res, new AuthUser("id", "type"));
+		Authorization auth = new Authorization(new AuthUser("sub", "type"), "act", res, new AuthUser("id", "type"));
 
 		authHelper.insert(auth);
 		logger.info("simple usage end");
