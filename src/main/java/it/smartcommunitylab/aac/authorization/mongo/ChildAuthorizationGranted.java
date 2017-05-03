@@ -2,19 +2,19 @@ package it.smartcommunitylab.aac.authorization.mongo;
 
 import org.springframework.data.annotation.TypeAlias;
 
-import it.smartcommunitylab.aac.authorization.model.AuthUser;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 
 @TypeAlias("childAuthGranted")
-public class ChildAuthGranted extends AuthGranted {
+public class ChildAuthorizationGranted extends AuthorizationGranted {
 
 	private String mainAuthGrantedId;
 
-	public ChildAuthGranted(Authorization auth) {
+	public ChildAuthorizationGranted(Authorization auth) {
 		super(auth);
 	}
 
-	private ChildAuthGranted(String id, AuthUser subject, String action, AuthUser entity, ResourceDocument resource,
+	private ChildAuthorizationGranted(String id, AuthorizationUser subject, String action, AuthorizationUser entity, ResourceDocument resource,
 			String mainAuthGrantedId) {
 		super(id, subject, action, entity, resource);
 		this.mainAuthGrantedId = mainAuthGrantedId;

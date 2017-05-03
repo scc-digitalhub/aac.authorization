@@ -3,27 +3,27 @@ package it.smartcommunitylab.aac.authorization.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import it.smartcommunitylab.aac.authorization.AuthHelper;
-import it.smartcommunitylab.aac.authorization.AuthSchemaHelper;
-import it.smartcommunitylab.aac.authorization.AuthStorage;
-import it.smartcommunitylab.aac.authorization.MongoAuthSchemaHelper;
-import it.smartcommunitylab.aac.authorization.mongo.MongoAuthStorage;
+import it.smartcommunitylab.aac.authorization.AuthorizationHelper;
+import it.smartcommunitylab.aac.authorization.AuthorizationSchemaHelper;
+import it.smartcommunitylab.aac.authorization.AuthorizationStorage;
+import it.smartcommunitylab.aac.authorization.MongoAuthorizationSchemaHelper;
+import it.smartcommunitylab.aac.authorization.mongo.MongoAuthorizationStorage;
 
 @Configuration
 public class Config {
 
 	@Bean
-	public AuthSchemaHelper authSchema() {
-		return new MongoAuthSchemaHelper();
+	public AuthorizationSchemaHelper authSchema() {
+		return new MongoAuthorizationSchemaHelper();
 	}
 
 	@Bean
-	public AuthStorage authStorage() {
-		return new MongoAuthStorage();
+	public AuthorizationStorage authStorage() {
+		return new MongoAuthorizationStorage();
 	}
 
 	@Bean
-	public AuthHelper authHelper() {
-		return new AuthHelper();
+	public AuthorizationHelper authHelper() {
+		return new AuthorizationHelper();
 	}
 }

@@ -5,11 +5,11 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class AuthUser {
+public class AuthorizationUser {
 	private String id;
 	private String type;
 
-	public AuthUser(String id, String type) {
+	public AuthorizationUser(String id, String type) {
 		this.id = id;
 		this.type = type;
 	}
@@ -33,7 +33,7 @@ public class AuthUser {
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		AuthUser rhs = (AuthUser) obj;
+		AuthorizationUser rhs = (AuthorizationUser) obj;
 		return new EqualsBuilder().append(id, rhs.id).append(type, rhs.type).isEquals();
 	}
 

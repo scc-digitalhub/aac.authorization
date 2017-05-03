@@ -2,18 +2,18 @@ package it.smartcommunitylab.aac.authorization.mongo;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import it.smartcommunitylab.aac.authorization.model.AuthUser;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 
 @Document(collection = "authGranted")
-abstract class AuthGranted {
+abstract class AuthorizationGranted {
 	private String id;
-	private AuthUser subject;
+	private AuthorizationUser subject;
 	private String action;
-	private AuthUser entity;
+	private AuthorizationUser entity;
 	private ResourceDocument resource;
 
-	public AuthGranted(final Authorization auth) {
+	public AuthorizationGranted(final Authorization auth) {
 		if (auth != null) {
 			id = auth.getId();
 			subject = auth.getSubject();
@@ -26,7 +26,7 @@ abstract class AuthGranted {
 	/*
 	 * Constructor used by Spring data to convert mongo dbobject in class instance
 	 */
-	protected AuthGranted(String id, AuthUser subject, String action, AuthUser entity, ResourceDocument resource) {
+	protected AuthorizationGranted(String id, AuthorizationUser subject, String action, AuthorizationUser entity, ResourceDocument resource) {
 		this.id = id;
 		this.subject = subject;
 		this.action = action;
@@ -44,7 +44,7 @@ abstract class AuthGranted {
 		return id;
 	}
 
-	public AuthUser getSubject() {
+	public AuthorizationUser getSubject() {
 		return subject;
 	}
 
@@ -52,7 +52,7 @@ abstract class AuthGranted {
 		return action;
 	}
 
-	public AuthUser getEntity() {
+	public AuthorizationUser getEntity() {
 		return entity;
 	}
 

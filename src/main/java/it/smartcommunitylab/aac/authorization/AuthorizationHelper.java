@@ -6,15 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 
-public class AuthHelper {
+public class AuthorizationHelper {
 
-	private final static Logger logger = LoggerFactory.getLogger(AuthHelper.class);
-
-	@Autowired
-	private AuthSchemaHelper policy;
+	private final static Logger logger = LoggerFactory.getLogger(AuthorizationHelper.class);
 
 	@Autowired
-	private AuthStorage storage;
+	private AuthorizationSchemaHelper policy;
+
+	@Autowired
+	private AuthorizationStorage storage;
 
 	public void insert(Authorization auth) {
 

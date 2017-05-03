@@ -9,13 +9,13 @@ import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.NodeValue;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
-public class SimpleAuthStorage implements AuthStorage {
+public class SimpleAuthorizationStorage implements AuthorizationStorage {
 
 	private Map<Authorization, int[]> storage = new HashMap<>();
 
-	private AuthSchemaHelper schema;
+	private AuthorizationSchemaHelper schema;
 
-	public SimpleAuthStorage(AuthSchemaHelper schema) {
+	public SimpleAuthorizationStorage(AuthorizationSchemaHelper schema) {
 		this.schema = schema;
 	}
 

@@ -19,7 +19,7 @@ import it.smartcommunitylab.aac.authorization.model.Node;
 import it.smartcommunitylab.aac.authorization.model.NodeAlreadyExist;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
-public class MongoAuthSchemaHelper implements AuthSchemaHelper {
+public class MongoAuthorizationSchemaHelper implements AuthorizationSchemaHelper {
 
 	@Autowired
 	private MongoTemplate mongo;
@@ -40,7 +40,7 @@ public class MongoAuthSchemaHelper implements AuthSchemaHelper {
 	}
 
 	@Override
-	public AuthSchemaHelper addChild(Node parent, Node child) throws NodeAlreadyExist {
+	public AuthorizationSchemaHelper addChild(Node parent, Node child) throws NodeAlreadyExist {
 		Query q = new Query(Criteria.where("qname").is(parent.getQname()));
 		Node p = mongo.findOne(q, Node.class);
 		if (p != null) {
@@ -59,7 +59,7 @@ public class MongoAuthSchemaHelper implements AuthSchemaHelper {
 	}
 
 	@Override
-	public AuthSchemaHelper addRootChild(Node child) throws NodeAlreadyExist {
+	public AuthorizationSchemaHelper addRootChild(Node child) throws NodeAlreadyExist {
 		return addChild(root, child);
 	}
 

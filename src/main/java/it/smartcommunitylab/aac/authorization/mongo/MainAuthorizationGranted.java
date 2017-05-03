@@ -7,21 +7,21 @@ import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import it.smartcommunitylab.aac.authorization.model.AuthUser;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 
 @Document(collection = "authGranted")
 @TypeAlias("mainAuthGranted")
-public class MainAuthGranted extends AuthGranted {
+public class MainAuthorizationGranted extends AuthorizationGranted {
 
 	private List<String> childAuths = new ArrayList<>();
 
-	public MainAuthGranted(Authorization auth) {
+	public MainAuthorizationGranted(Authorization auth) {
 		super(auth);
 	}
 
 	@PersistenceConstructor
-	private MainAuthGranted(String id, AuthUser subject, String action, AuthUser entity, ResourceDocument resource,
+	private MainAuthorizationGranted(String id, AuthorizationUser subject, String action, AuthorizationUser entity, ResourceDocument resource,
 			List<String> childAuths) {
 		super(id, subject, action, entity, resource);
 		this.childAuths = childAuths;

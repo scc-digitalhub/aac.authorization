@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 
 @Service
-public interface AuthStorage {
+public interface AuthorizationStorage {
 
 	public Authorization insert(Authorization auth);
 

@@ -14,8 +14,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
-import it.smartcommunitylab.aac.authorization.AuthStorage;
-import it.smartcommunitylab.aac.authorization.AuthSchemaHelper;
+import it.smartcommunitylab.aac.authorization.AuthorizationStorage;
+import it.smartcommunitylab.aac.authorization.AuthorizationSchemaHelper;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.Node;
 import it.smartcommunitylab.aac.authorization.model.NodeParameter;
@@ -24,28 +24,28 @@ import it.smartcommunitylab.aac.authorization.model.Resource;
 import it.smartcommunitylab.aac.authorization.mongo.ResourceDocument.AttributeDocument;
 
 @Component
-public class MongoAuthStorage implements AuthStorage {
+public class MongoAuthorizationStorage implements AuthorizationStorage {
 
 	@Autowired
 	private MongoTemplate mongo;
 
 	@Autowired
-	private AuthSchemaHelper authSchema;
+	private AuthorizationSchemaHelper authSchema;
 
 	@Override
 	public Authorization insert(Authorization auth) {
 		return insertMainAuth(auth).toAuthorization();
 	}
 
-	private AuthGranted insertMainAuth(Authorization auth) {
-		MainAuthGranted authGranted = new MainAuthGranted(auth);
+	private AuthorizationGranted insertMainAuth(Authorization auth) {
+		MainAuthorizationGranted authGranted = new MainAuthorizationGranted(auth);
 		mongo.insert(authGranted);
 
 		Node nodeDefinition = authSchema.getNode(auth.getResource().getQnameRef());
 		if (nodeDefinition != null) {
 			Set<Node> allChildren = authSchema.getAllChildren(nodeDefinition);
 			allChildren.stream().forEach(childNodeDefinition -> {
-				AuthGranted child = insertChildAuth(generateChildAuthorization(childNodeDefinition, auth),
+				AuthorizationGranted child = insertChildAuth(generateChildAuthorization(childNodeDefinition, auth),
 						authGranted.getId());
 				authGranted.addChildAuth(child.getId());
 			});
@@ -53,14 +53,14 @@ public class MongoAuthStorage implements AuthStorage {
 			// update child refs
 			Query q = new Query(Criteria.where("id").is(authGranted.getId()));
 			Update ops = new Update().set("childAuths", authGranted.getChildAuths());
-			mongo.findAndModify(q, ops, MainAuthGranted.class);
+			mongo.findAndModify(q, ops, MainAuthorizationGranted.class);
 		}
 
 		return authGranted;
 	}
 
-	private AuthGranted insertChildAuth(Authorization auth, String mainAuthId) {
-		ChildAuthGranted authGranted = new ChildAuthGranted(auth);
+	private AuthorizationGranted insertChildAuth(Authorization auth, String mainAuthId) {
+		ChildAuthorizationGranted authGranted = new ChildAuthorizationGranted(auth);
 		authGranted.setMainAuthGranted(mainAuthId);
 		mongo.insert(authGranted);
 		return authGranted;
@@ -89,21 +89,21 @@ public class MongoAuthStorage implements AuthStorage {
 	@Override
 	public void remove(Authorization auth) {
 		Query query = new Query(Criteria.where("id").is(auth.getId()));
-		MainAuthGranted authGranted = mongo.findOne(query, MainAuthGranted.class);
+		MainAuthorizationGranted authGranted = mongo.findOne(query, MainAuthorizationGranted.class);
 		if (authGranted != null) {
 			// try to remove child auths
 			authGranted.getChildAuths().stream().forEach(child -> {
 				Query q = new Query(Criteria.where("id").is(child));
-				mongo.remove(q, ChildAuthGranted.class);
+				mongo.remove(q, ChildAuthorizationGranted.class);
 			});
 
-			mongo.remove(query, MainAuthGranted.class);
+			mongo.remove(query, MainAuthorizationGranted.class);
 		}
 	}
 
 	@Override
 	public boolean search(Authorization auth) {
-		AuthGranted authGranted = new MainAuthGranted(auth);
+		AuthorizationGranted authGranted = new MainAuthorizationGranted(auth);
 		Criteria crit = Criteria.where("subject");
 		crit.is(auth.getSubject());
 		crit.and("action").is(authGranted.getAction());
@@ -114,7 +114,7 @@ public class MongoAuthStorage implements AuthStorage {
 			crit.and("resource.attrs." + attr.getName()).in(Arrays.asList(attr.getValue(), NodeValue.ALL_VALUE));
 		}
 		Query query = new Query(crit);
-		return mongo.exists(query, MainAuthGranted.class);
+		return mongo.exists(query, MainAuthorizationGranted.class);
 	}
 
 }

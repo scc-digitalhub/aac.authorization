@@ -15,22 +15,22 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import it.smartcommunitylab.aac.authorization.config.MongoConfig;
-import it.smartcommunitylab.aac.authorization.model.AuthUser;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.Node;
 import it.smartcommunitylab.aac.authorization.model.NodeAlreadyExist;
 import it.smartcommunitylab.aac.authorization.model.NodeValue;
 import it.smartcommunitylab.aac.authorization.model.Resource;
-import it.smartcommunitylab.aac.authorization.mongo.MongoAuthStorage;
+import it.smartcommunitylab.aac.authorization.mongo.MongoAuthorizationStorage;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { MongoConfig.class,
 		TestAppConfig.class }, loader = AnnotationConfigContextLoader.class)
 @TestPropertySource(properties = { "mongo.dbname=aac-authorization-db-test" })
-public class MongoAuthStorageTest {
+public class MongoAuthorizationStorageTest {
 
 	@Autowired
-	private AuthStorage storage;
+	private AuthorizationStorage storage;
 
 	@Autowired
 	private MongoTemplate mongo;
@@ -43,8 +43,8 @@ public class MongoAuthStorageTest {
 	@Test
 	public void saveAuthorization() {
 		Resource r = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
-		AuthUser entity = new AuthUser("id", "type");
-		AuthUser subject = new AuthUser("sub", "type");
+		AuthorizationUser entity = new AuthorizationUser("id", "type");
+		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Authorization auth = new Authorization(subject, "action", r, entity);
 		storage.insert(auth);
 	}
@@ -53,12 +53,12 @@ public class MongoAuthStorageTest {
 	public void insertFirstAuthorization() {
 
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
-		AuthUser entity = new AuthUser("e1", "type1");
-		AuthUser subject = new AuthUser("sub", "type");
+		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
+		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		storage.insert(new Authorization(subject, "action", res, entity));
 
 		Resource res1 = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
-		AuthUser entity1 = new AuthUser("e1", "type1");
+		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 
 		Assert.assertEquals(true, storage.search(new Authorization(subject, "action", res1, entity1)));
 
@@ -68,8 +68,8 @@ public class MongoAuthStorageTest {
 	public void searchNotExistentAuthWithEmptyStorage() {
 
 		Resource res1 = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
-		AuthUser entity1 = new AuthUser("e1", "type1");
-		AuthUser subject = new AuthUser("sub", "type");
+		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
+		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Assert.assertEquals(false, storage.search(new Authorization(subject, "action", res1, entity1)));
 
 	}
@@ -78,12 +78,12 @@ public class MongoAuthStorageTest {
 	public void searchNotExistentAuthWithPopulatedStorage() {
 
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
-		AuthUser entity = new AuthUser("e1", "type1");
-		AuthUser subject = new AuthUser("sub", "type");
+		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
+		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		storage.insert(new Authorization(subject, "action", res, entity));
 
 		Resource res1 = new Resource("B", Arrays.asList(new NodeValue("B", "a", "a_value")));
-		AuthUser entity1 = new AuthUser("e1", "type1");
+		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 
 		Assert.assertEquals(false, storage.search(new Authorization(subject, "action", res1, entity1)));
 
@@ -93,8 +93,8 @@ public class MongoAuthStorageTest {
 	public void removePresentAuth() {
 
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
-		AuthUser entity = new AuthUser("e1", "type1");
-		AuthUser subject = new AuthUser("sub", "type");
+		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
+		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
 		auth1 = storage.insert(auth1);
 
@@ -107,13 +107,13 @@ public class MongoAuthStorageTest {
 	public void removeNotPresentAuth() {
 
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
-		AuthUser entity = new AuthUser("e1", "type1");
-		AuthUser subject = new AuthUser("sub", "type");
+		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
+		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
 		storage.insert(auth1);
 
-		Authorization dummy = new Authorization(new AuthUser("dummy", "dummy"), "action", null,
-				new AuthUser("id2", "type"));
+		Authorization dummy = new Authorization(new AuthorizationUser("dummy", "dummy"), "action", null,
+				new AuthorizationUser("id2", "type"));
 
 		Assert.assertTrue(storage.search(auth1));
 		storage.remove(dummy);
@@ -124,13 +124,13 @@ public class MongoAuthStorageTest {
 	public void searchOnWildcardAuthorization() {
 
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", NodeValue.ALL_VALUE)));
-		AuthUser entity = new AuthUser("e1", "type1");
-		AuthUser subject = new AuthUser("sub", "type");
+		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
+		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
 		storage.insert(auth1);
 
 		Resource res1 = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_value")));
-		AuthUser entity1 = new AuthUser("e1", "type1");
+		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 		Authorization authToFind = new Authorization(subject, "action", res1, entity1);
 
 		Assert.assertTrue(storage.search(authToFind));
@@ -140,14 +140,14 @@ public class MongoAuthStorageTest {
 	@Test
 	public void searchForAChildAuthorization() {
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", NodeValue.ALL_VALUE)));
-		AuthUser entity = new AuthUser("e1", "type1");
-		AuthUser subject = new AuthUser("sub", "type");
+		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
+		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
 		storage.insert(auth1);
 
 		Resource res1 = new Resource("E", Arrays.asList(new NodeValue("A", "a", "a_value"),
 				new NodeValue("C", "c", "c_value"), new NodeValue("E", "e", "e_value")));
-		AuthUser entity1 = new AuthUser("e1", "type1");
+		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 		Authorization authToFind = new Authorization(subject, "action", res1, entity1);
 
 		Assert.assertTrue(storage.search(authToFind));
@@ -157,8 +157,8 @@ public class MongoAuthStorageTest {
 class TestAppConfig {
 
 	@Bean
-	public AuthStorage authStorage() {
-		return new MongoAuthStorage();
+	public AuthorizationStorage authStorage() {
+		return new MongoAuthorizationStorage();
 	}
 
 	/*
@@ -170,8 +170,8 @@ class TestAppConfig {
 	 */
 
 	@Bean
-	public AuthSchemaHelper authSchema() {
-		AuthSchemaHelper schema = new SimpleAuthSchemaHelper();
+	public AuthorizationSchemaHelper authSchema() {
+		AuthorizationSchemaHelper schema = new SimpleAuthorizationSchemaHelper();
 		Node node = new Node("A");
 		node.addParameter("a");
 

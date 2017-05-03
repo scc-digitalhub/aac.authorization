@@ -22,16 +22,16 @@ import it.smartcommunitylab.aac.authorization.config.MongoConfig;
 import it.smartcommunitylab.aac.authorization.model.Node;
 import it.smartcommunitylab.aac.authorization.model.NodeAlreadyExist;
 import it.smartcommunitylab.aac.authorization.model.NodeParameter;
-import it.smartcommunitylab.aac.authorization.mongo.MongoAuthStorage;
+import it.smartcommunitylab.aac.authorization.mongo.MongoAuthorizationStorage;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { MongoConfig.class,
 		MongoAuthSchemaConfig.class }, loader = AnnotationConfigContextLoader.class)
 @TestPropertySource(properties = { "mongo.dbname=aac-authorization-db-test" })
-public class MongoAuthSchemaHelperTest {
+public class MongoAuthorizationSchemaHelperTest {
 
 	@Autowired
-	private AuthSchemaHelper authSchema;
+	private AuthorizationSchemaHelper authSchema;
 
 	@Autowired
 	private MongoTemplate mongo;
@@ -122,13 +122,13 @@ public class MongoAuthSchemaHelperTest {
 class MongoAuthSchemaConfig {
 
 	@Bean
-	public AuthStorage authStorage() {
-		return new MongoAuthStorage();
+	public AuthorizationStorage authStorage() {
+		return new MongoAuthorizationStorage();
 	}
 
 	@Bean
-	public AuthSchemaHelper authSchema() {
-		return new MongoAuthSchemaHelper();
+	public AuthorizationSchemaHelper authSchema() {
+		return new MongoAuthorizationSchemaHelper();
 	}
 
 }

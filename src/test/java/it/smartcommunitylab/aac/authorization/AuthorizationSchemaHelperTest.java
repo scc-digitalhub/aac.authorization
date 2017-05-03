@@ -10,12 +10,12 @@ import org.junit.Test;
 import it.smartcommunitylab.aac.authorization.model.Node;
 import it.smartcommunitylab.aac.authorization.model.NodeAlreadyExist;
 
-public class AuthSchemaHelperTest {
+public class AuthorizationSchemaHelperTest {
 
 
 	@Test
 	public void allChildren() throws NodeAlreadyExist {
-		AuthSchemaHelper p = new SimpleAuthSchemaHelper();
+		AuthorizationSchemaHelper p = new SimpleAuthorizationSchemaHelper();
 		Node node1 = new Node("A");
 		Node node2 = new Node("B");
 		Node node3 = new Node("C");
@@ -35,7 +35,7 @@ public class AuthSchemaHelperTest {
 
 	@Test
 	public void getAllChildren() throws NodeAlreadyExist {
-		AuthSchemaHelper authSchema = new SimpleAuthSchemaHelper();
+		AuthorizationSchemaHelper authSchema = new SimpleAuthorizationSchemaHelper();
 		Node nodeA = new Node("A");
 		authSchema.addRootChild(nodeA);
 		Node nodeB = new Node("B");
@@ -53,7 +53,7 @@ public class AuthSchemaHelperTest {
 
 	@Test(expected = NodeAlreadyExist.class)
 	public void nodeAlreadyExist() throws NodeAlreadyExist {
-		AuthSchemaHelper authSchema = new SimpleAuthSchemaHelper();
+		AuthorizationSchemaHelper authSchema = new SimpleAuthorizationSchemaHelper();
 		Node nodeA = new Node("A");
 		authSchema.addRootChild(nodeA);
 		authSchema.addChild(nodeA, nodeA);
@@ -61,7 +61,7 @@ public class AuthSchemaHelperTest {
 
 	@Test
 	public void addRootChild() throws NodeAlreadyExist {
-		AuthSchemaHelper authSchema = new SimpleAuthSchemaHelper();
+		AuthorizationSchemaHelper authSchema = new SimpleAuthorizationSchemaHelper();
 		Node node = new Node("A");
 		Assert.assertNull(authSchema.getNode("A"));
 		authSchema.addRootChild(node);
@@ -70,7 +70,7 @@ public class AuthSchemaHelperTest {
 
 	@Test
 	public void addSecondLevelChild() throws NodeAlreadyExist {
-		AuthSchemaHelper authSchema = new SimpleAuthSchemaHelper();
+		AuthorizationSchemaHelper authSchema = new SimpleAuthorizationSchemaHelper();
 		Node nodeA = new Node("A");
 		authSchema.addRootChild(nodeA);
 		Node nodeB = new Node("B");

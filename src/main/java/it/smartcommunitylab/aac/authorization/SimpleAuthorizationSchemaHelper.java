@@ -12,14 +12,14 @@ import it.smartcommunitylab.aac.authorization.model.Node;
 import it.smartcommunitylab.aac.authorization.model.NodeAlreadyExist;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
-public class SimpleAuthSchemaHelper implements AuthSchemaHelper {
+public class SimpleAuthorizationSchemaHelper implements AuthorizationSchemaHelper {
 	private Node root;
 
 	private Set<String> nid = new HashSet<>();
 
 	private Map<String, Node> index = new HashMap<>();
 
-	public SimpleAuthSchemaHelper() {
+	public SimpleAuthorizationSchemaHelper() {
 		root = new Node(Node.ROOT_NODE_ATTRIBUTE);
 	}
 
@@ -32,7 +32,7 @@ public class SimpleAuthSchemaHelper implements AuthSchemaHelper {
 	 * @throws NodeAlreadyExist
 	 */
 	@Override
-	public AuthSchemaHelper addChild(Node parent, Node child) throws NodeAlreadyExist {
+	public AuthorizationSchemaHelper addChild(Node parent, Node child) throws NodeAlreadyExist {
 		if (!index.containsKey(child.getQname())) {
 			parent = parent.addChild(child);
 			child = child.addParent(parent);
@@ -51,7 +51,7 @@ public class SimpleAuthSchemaHelper implements AuthSchemaHelper {
 	 * @throws NodeAlreadyExist
 	 */
 	@Override
-	public AuthSchemaHelper addRootChild(Node child) throws NodeAlreadyExist {
+	public AuthorizationSchemaHelper addRootChild(Node child) throws NodeAlreadyExist {
 		return addChild(root, child);
 	}
 

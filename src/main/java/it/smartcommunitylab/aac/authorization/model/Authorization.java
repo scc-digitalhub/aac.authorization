@@ -7,19 +7,19 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class Authorization {
 	private String id;
-	private AuthUser subject;
+	private AuthorizationUser subject;
 	private String action;
 	private Resource resource;
-	private AuthUser entity;
+	private AuthorizationUser entity;
 
-	public Authorization(AuthUser subject, String action, Resource resource, AuthUser entity) {
+	public Authorization(AuthorizationUser subject, String action, Resource resource, AuthorizationUser entity) {
 		this.subject = subject;
 		this.action = action;
 		this.resource = resource;
 		this.entity = entity;
 	}
 
-	public Authorization(String id, AuthUser subject, String action, Resource resource, AuthUser entity) {
+	public Authorization(String id, AuthorizationUser subject, String action, Resource resource, AuthorizationUser entity) {
 		this.id = id;
 		this.subject = subject;
 		this.action = action;
@@ -31,7 +31,7 @@ public class Authorization {
 		return id;
 	}
 
-	public AuthUser getSubject() {
+	public AuthorizationUser getSubject() {
 		return subject;
 	}
 
@@ -43,7 +43,7 @@ public class Authorization {
 		return resource;
 	}
 
-	public AuthUser getEntity() {
+	public AuthorizationUser getEntity() {
 		return entity;
 	}
 
