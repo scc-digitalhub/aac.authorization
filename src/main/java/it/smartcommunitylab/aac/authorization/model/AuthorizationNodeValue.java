@@ -5,14 +5,14 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class NodeValue {
-	private NodeParameter definition;
+public class AuthorizationNodeValue {
+	private AuthorizationNodeParam definition;
 	private String value;
 
 	public static final String ALL_VALUE = "*";
 
-	public NodeValue(String qname, String name, String value) {
-		definition = new NodeParameter(qname, name);
+	public AuthorizationNodeValue(String qname, String name, String value) {
+		definition = new AuthorizationNodeParam(qname, name);
 		this.value = value;
 	}
 
@@ -20,7 +20,7 @@ public class NodeValue {
 		return value;
 	}
 
-	public final NodeParameter getDefinition() {
+	public final AuthorizationNodeParam getDefinition() {
 		return definition;
 	}
 
@@ -35,7 +35,7 @@ public class NodeValue {
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		NodeValue rhs = (NodeValue) obj;
+		AuthorizationNodeValue rhs = (AuthorizationNodeValue) obj;
 		return new EqualsBuilder().append(definition, rhs.definition).append(value, rhs.value).isEquals();
 	}
 

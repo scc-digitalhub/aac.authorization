@@ -8,37 +8,37 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import it.smartcommunitylab.aac.authorization.model.Node;
-import it.smartcommunitylab.aac.authorization.model.NodeAlreadyExist;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExist;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
 public class SimpleAuthorizationSchemaHelper implements AuthorizationSchemaHelper {
-	private Node root;
+	private AuthorizationNode root;
 
 	private Set<String> nid = new HashSet<>();
 
-	private Map<String, Node> index = new HashMap<>();
+	private Map<String, AuthorizationNode> index = new HashMap<>();
 
 	public SimpleAuthorizationSchemaHelper() {
-		root = new Node(Node.ROOT_NODE_ATTRIBUTE);
+		root = new AuthorizationNode(AuthorizationNode.ROOT_NODE_ATTRIBUTE);
 	}
 
 	/**
-	 * Add a child to given {@link Node}
+	 * Add a child to given {@link AuthorizationNode}
 	 * 
 	 * @param parent
 	 * @param child
 	 * @return
-	 * @throws NodeAlreadyExist
+	 * @throws AuthorizationNodeAlreadyExist
 	 */
 	@Override
-	public AuthorizationSchemaHelper addChild(Node parent, Node child) throws NodeAlreadyExist {
+	public AuthorizationSchemaHelper addChild(AuthorizationNode parent, AuthorizationNode child) throws AuthorizationNodeAlreadyExist {
 		if (!index.containsKey(child.getQname())) {
 			parent = parent.addChild(child);
 			child = child.addParent(parent);
 			index.put(child.getQname(), child);
 		} else {
-			throw new NodeAlreadyExist();
+			throw new AuthorizationNodeAlreadyExist();
 		}
 		return this;
 	}
@@ -48,10 +48,10 @@ public class SimpleAuthorizationSchemaHelper implements AuthorizationSchemaHelpe
 	 * 
 	 * @param child
 	 * @return
-	 * @throws NodeAlreadyExist
+	 * @throws AuthorizationNodeAlreadyExist
 	 */
 	@Override
-	public AuthorizationSchemaHelper addRootChild(Node child) throws NodeAlreadyExist {
+	public AuthorizationSchemaHelper addRootChild(AuthorizationNode child) throws AuthorizationNodeAlreadyExist {
 		return addChild(root, child);
 	}
 
@@ -60,15 +60,15 @@ public class SimpleAuthorizationSchemaHelper implements AuthorizationSchemaHelpe
 		if (res == null) {
 			throw new NullPointerException("resource cannot be null");
 		}
-		Node ref = getNode(res.getQnameRef());
+		AuthorizationNode ref = getNode(res.getQnameRef());
 		return ref != null && res.isInstanceOf(ref);
 	}
 
 	@Override
-	public Set<Node> getChildren(Node node) {
-		Set<Node> children = new HashSet<>();
+	public Set<AuthorizationNode> getChildren(AuthorizationNode node) {
+		Set<AuthorizationNode> children = new HashSet<>();
 		node.getChildren().stream().forEach(nodeNs -> {
-			Node child = index.get(nodeNs);
+			AuthorizationNode child = index.get(nodeNs);
 			if (child != null) {
 				children.add(child);
 			}
@@ -77,13 +77,13 @@ public class SimpleAuthorizationSchemaHelper implements AuthorizationSchemaHelpe
 	}
 
 	@Override
-	public Set<Node> getAllChildren(Node node) {
-		Set<Node> allChildren = new LinkedHashSet<>();
-		Set<Node> directChildren = getChildren(node);
+	public Set<AuthorizationNode> getAllChildren(AuthorizationNode node) {
+		Set<AuthorizationNode> allChildren = new LinkedHashSet<>();
+		Set<AuthorizationNode> directChildren = getChildren(node);
 		allChildren.addAll(directChildren);
-		Queue<Node> queue = new LinkedList<>();
+		Queue<AuthorizationNode> queue = new LinkedList<>();
 		queue.addAll(directChildren);
-		Node visit = null;
+		AuthorizationNode visit = null;
 		while ((visit = queue.poll()) != null) {
 			allChildren.addAll(getAllChildren(visit));
 		}
@@ -91,7 +91,7 @@ public class SimpleAuthorizationSchemaHelper implements AuthorizationSchemaHelpe
 	}
 
 	@Override
-	public Node getNode(String qname) {
+	public AuthorizationNode getNode(String qname) {
 		return index.get(qname);
 	}
 }

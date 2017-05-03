@@ -12,9 +12,9 @@ import it.smartcommunitylab.aac.authorization.config.Config;
 import it.smartcommunitylab.aac.authorization.config.MongoConfig;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
-import it.smartcommunitylab.aac.authorization.model.Node;
-import it.smartcommunitylab.aac.authorization.model.NodeAlreadyExist;
-import it.smartcommunitylab.aac.authorization.model.NodeValue;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExist;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeValue;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
 public class SampleUsage {
@@ -29,16 +29,16 @@ public class SampleUsage {
 
 		AuthorizationSchemaHelper schemaHelper = ctx.getBean(AuthorizationSchemaHelper.class);
 
-		Node nodeA = new Node("A");
+		AuthorizationNode nodeA = new AuthorizationNode("A");
 		nodeA.addParameter("a");
 		try {
 			schemaHelper.addRootChild(nodeA);
-		} catch (NodeAlreadyExist e) {
+		} catch (AuthorizationNodeAlreadyExist e) {
 			// silence exception
 		}
 		AuthorizationHelper authHelper = ctx.getBean(AuthorizationHelper.class);
 		ctx.close();
-		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_Value")));
+		Resource res = new Resource("A", Arrays.asList(new AuthorizationNodeValue("A", "a", "a_Value")));
 		Authorization auth = new Authorization(new AuthorizationUser("sub", "type"), "act", res, new AuthorizationUser("id", "type"));
 
 		authHelper.insert(auth);

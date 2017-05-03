@@ -10,19 +10,19 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class Resource {
 	private String qnameRef;
-	private List<NodeValue> values;
+	private List<AuthorizationNodeValue> values;
 
-	public Resource(String qnameRef, List<NodeValue> values) {
+	public Resource(String qnameRef, List<AuthorizationNodeValue> values) {
 		this.qnameRef = qnameRef;
 		this.values = new ArrayList<>(values);
 	}
 
-	public boolean isInstanceOf(Node node) {
+	public boolean isInstanceOf(AuthorizationNode node) {
 		return qnameRef.equals(node.getQname()) && checkLogicalEquivalence(node.getParameters(), values);
 	}
 
-	private boolean checkLogicalEquivalence(List<NodeParameter> s1, List<NodeValue> s2) {
-		for (NodeValue nv : s2) {
+	private boolean checkLogicalEquivalence(List<AuthorizationNodeParam> s1, List<AuthorizationNodeValue> s2) {
+		for (AuthorizationNodeValue nv : s2) {
 			if (!s1.contains(nv.getDefinition())) {
 				return false;
 			}
@@ -34,7 +34,7 @@ public class Resource {
 		return qnameRef;
 	}
 
-	public List<NodeValue> getValues() {
+	public List<AuthorizationNodeValue> getValues() {
 		return values;
 	}
 

@@ -5,11 +5,11 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class NodeParameter {
+public class AuthorizationNodeParam {
 	private String qname;
 	private String name;
 
-	public NodeParameter(String qname, String name) {
+	public AuthorizationNodeParam(String qname, String name) {
 		this.qname = qname;
 		this.name = name;
 	}
@@ -33,7 +33,7 @@ public class NodeParameter {
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		NodeParameter rhs = (NodeParameter) obj;
+		AuthorizationNodeParam rhs = (AuthorizationNodeParam) obj;
 		return new EqualsBuilder().append(qname, rhs.qname).append(name, rhs.name).isEquals();
 	}
 

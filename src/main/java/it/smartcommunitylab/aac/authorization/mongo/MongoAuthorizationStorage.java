@@ -17,9 +17,9 @@ import org.springframework.stereotype.Component;
 import it.smartcommunitylab.aac.authorization.AuthorizationStorage;
 import it.smartcommunitylab.aac.authorization.AuthorizationSchemaHelper;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
-import it.smartcommunitylab.aac.authorization.model.Node;
-import it.smartcommunitylab.aac.authorization.model.NodeParameter;
-import it.smartcommunitylab.aac.authorization.model.NodeValue;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeParam;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeValue;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 import it.smartcommunitylab.aac.authorization.mongo.ResourceDocument.AttributeDocument;
 
@@ -41,9 +41,9 @@ public class MongoAuthorizationStorage implements AuthorizationStorage {
 		MainAuthorizationGranted authGranted = new MainAuthorizationGranted(auth);
 		mongo.insert(authGranted);
 
-		Node nodeDefinition = authSchema.getNode(auth.getResource().getQnameRef());
+		AuthorizationNode nodeDefinition = authSchema.getNode(auth.getResource().getQnameRef());
 		if (nodeDefinition != null) {
-			Set<Node> allChildren = authSchema.getAllChildren(nodeDefinition);
+			Set<AuthorizationNode> allChildren = authSchema.getAllChildren(nodeDefinition);
 			allChildren.stream().forEach(childNodeDefinition -> {
 				AuthorizationGranted child = insertChildAuth(generateChildAuthorization(childNodeDefinition, auth),
 						authGranted.getId());
@@ -66,21 +66,21 @@ public class MongoAuthorizationStorage implements AuthorizationStorage {
 		return authGranted;
 	}
 
-	private Authorization generateChildAuthorization(Node childNodeDefinition, Authorization parentAuthorization) {
+	private Authorization generateChildAuthorization(AuthorizationNode childNodeDefinition, Authorization parentAuthorization) {
 		return new Authorization(parentAuthorization.getSubject(), parentAuthorization.getAction(),
 				generateChildResource(childNodeDefinition, parentAuthorization.getResource()),
 				parentAuthorization.getEntity());
 	}
 
-	private Resource generateChildResource(Node childNodeDefinition, Resource parentResource) {
-		List<NodeValue> childValues = new ArrayList<>(parentResource.getValues());
-		List<NodeParameter> definitions = childValues.stream().map(childValue -> {
+	private Resource generateChildResource(AuthorizationNode childNodeDefinition, Resource parentResource) {
+		List<AuthorizationNodeValue> childValues = new ArrayList<>(parentResource.getValues());
+		List<AuthorizationNodeParam> definitions = childValues.stream().map(childValue -> {
 			return childValue.getDefinition();
 		}).collect(Collectors.toList());
-		List<NodeParameter> toAssign = (List<NodeParameter>) CollectionUtils
+		List<AuthorizationNodeParam> toAssign = (List<AuthorizationNodeParam>) CollectionUtils
 				.subtract(childNodeDefinition.getParameters(), definitions);
 		toAssign.stream().forEach(assign -> {
-			childValues.add(new NodeValue(assign.getQname(), assign.getName(), NodeValue.ALL_VALUE));
+			childValues.add(new AuthorizationNodeValue(assign.getQname(), assign.getName(), AuthorizationNodeValue.ALL_VALUE));
 		});
 		return new Resource(childNodeDefinition.getQname(), childValues);
 
@@ -111,7 +111,7 @@ public class MongoAuthorizationStorage implements AuthorizationStorage {
 		crit.and("entity.type").is(authGranted.getEntity().getType());
 		crit.and("resource.qname").is(authGranted.getResource().getQname());
 		for (AttributeDocument attr : authGranted.getResource().getAttributes()) {
-			crit.and("resource.attrs." + attr.getName()).in(Arrays.asList(attr.getValue(), NodeValue.ALL_VALUE));
+			crit.and("resource.attrs." + attr.getName()).in(Arrays.asList(attr.getValue(), AuthorizationNodeValue.ALL_VALUE));
 		}
 		Query query = new Query(crit);
 		return mongo.exists(query, MainAuthorizationGranted.class);

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import it.smartcommunitylab.aac.authorization.model.Authorization;
-import it.smartcommunitylab.aac.authorization.model.NodeValue;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeValue;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
 public class SimpleAuthorizationStorage implements AuthorizationStorage {
@@ -52,16 +52,16 @@ public class SimpleAuthorizationStorage implements AuthorizationStorage {
 	}
 
 	private List<Resource> createDependentResources(Resource res) {
-		List<NodeValue> values = res.getValues();
-		NodeValue removed = values.remove(values.size() - 1);
+		List<AuthorizationNodeValue> values = res.getValues();
+		AuthorizationNodeValue removed = values.remove(values.size() - 1);
 		values.add(createNodeValueAll(removed));
 		Resource depRes = new Resource(res.getQnameRef(), values);
 		return Arrays.asList(depRes);
 
 	}
 
-	public NodeValue createNodeValueAll(NodeValue value) {
-		return new NodeValue(value.getDefinition().getQname(), value.getDefinition().getName(), NodeValue.ALL_VALUE);
+	public AuthorizationNodeValue createNodeValueAll(AuthorizationNodeValue value) {
+		return new AuthorizationNodeValue(value.getDefinition().getQname(), value.getDefinition().getName(), AuthorizationNodeValue.ALL_VALUE);
 	}
 
 }

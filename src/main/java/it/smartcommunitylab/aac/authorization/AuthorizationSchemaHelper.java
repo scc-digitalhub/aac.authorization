@@ -4,38 +4,38 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import it.smartcommunitylab.aac.authorization.model.Node;
-import it.smartcommunitylab.aac.authorization.model.NodeAlreadyExist;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExist;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
 @Service
 public interface AuthorizationSchemaHelper {
 
 	/**
-	 * Add a child to given {@link Node}
+	 * Add a child to given {@link AuthorizationNode}
 	 * 
 	 * @param parent
 	 * @param child
 	 * @return
-	 * @throws NodeAlreadyExist
+	 * @throws AuthorizationNodeAlreadyExist
 	 */
-	AuthorizationSchemaHelper addChild(Node parent, Node child) throws NodeAlreadyExist;
+	AuthorizationSchemaHelper addChild(AuthorizationNode parent, AuthorizationNode child) throws AuthorizationNodeAlreadyExist;
 
 	/**
 	 * Add a child to root node
 	 * 
 	 * @param child
 	 * @return
-	 * @throws NodeAlreadyExist
+	 * @throws AuthorizationNodeAlreadyExist
 	 */
-	AuthorizationSchemaHelper addRootChild(Node child) throws NodeAlreadyExist;
+	AuthorizationSchemaHelper addRootChild(AuthorizationNode child) throws AuthorizationNodeAlreadyExist;
 
 	boolean isValid(Resource res);
 
-	Set<Node> getChildren(Node node);
+	Set<AuthorizationNode> getChildren(AuthorizationNode node);
 
-	Set<Node> getAllChildren(Node node);
+	Set<AuthorizationNode> getAllChildren(AuthorizationNode node);
 
-	Node getNode(String qname);
+	AuthorizationNode getNode(String qname);
 
 }

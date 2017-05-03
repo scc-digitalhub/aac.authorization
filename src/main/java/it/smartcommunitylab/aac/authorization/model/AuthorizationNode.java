@@ -12,48 +12,48 @@ import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "authorizationSchema")
-public class Node {
+public class AuthorizationNode {
 
 	public static final String ROOT_NODE_ATTRIBUTE = "root";
 
 	@Id
 	private String qname;
 
-	private List<NodeParameter> parameters = new ArrayList<>();
+	private List<AuthorizationNodeParam> parameters = new ArrayList<>();
 
 	private Set<String> parentNs = new HashSet<>();
 	private Set<String> childrenNs = new HashSet<>();
 
-	public Node(String qname) {
+	public AuthorizationNode(String qname) {
 		this.qname = qname;
 	}
 
 
 
 	@PersistenceConstructor
-	private Node(String qname, final List<NodeParameter> parameters) {
+	private AuthorizationNode(String qname, final List<AuthorizationNodeParam> parameters) {
 		this(qname);
 		this.parameters.addAll(parameters);
 	}
 
-	public Node(String qname, String parameter) {
+	public AuthorizationNode(String qname, String parameter) {
 		this(qname);
-		this.parameters.add(new NodeParameter(qname, parameter));
+		this.parameters.add(new AuthorizationNodeParam(qname, parameter));
 	}
 
-	public Node addChild(Node node) {
+	public AuthorizationNode addChild(AuthorizationNode node) {
 		childrenNs.add(node.getQname());
 		return this;
 	}
 
-	public Node addParent(Node node) {
+	public AuthorizationNode addParent(AuthorizationNode node) {
 		parentNs.add(node.getQname());
 		parameters.addAll(node.parameters);
 		return this;
 	}
 
-	public Node addParameter(String param) {
-		parameters.add(new NodeParameter(qname, param));
+	public AuthorizationNode addParameter(String param) {
+		parameters.add(new AuthorizationNodeParam(qname, param));
 		return this;
 	}
 
@@ -70,7 +70,7 @@ public class Node {
 		return qname;
 	}
 
-	public List<NodeParameter> getParameters() {
+	public List<AuthorizationNodeParam> getParameters() {
 		return parameters;
 	}
 
@@ -90,7 +90,7 @@ public class Node {
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		Node rhs = (Node) obj;
+		AuthorizationNode rhs = (AuthorizationNode) obj;
 		return new EqualsBuilder().append(qname, rhs.qname).isEquals();
 	}
 

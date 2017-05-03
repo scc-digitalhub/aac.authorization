@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import it.smartcommunitylab.aac.authorization.model.NodeValue;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeValue;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
 class ResourceDocument {
@@ -48,8 +48,8 @@ class ResourceDocument {
 		attributes.put(name, value);
 	}
 
-	public void addAllAttributes(Collection<NodeValue> attributes) {
-		for (NodeValue attr : attributes) {
+	public void addAllAttributes(Collection<AuthorizationNodeValue> attributes) {
+		for (AuthorizationNodeValue attr : attributes) {
 			addAttribute(getAttrName(attr.getDefinition().getQname(), attr.getDefinition().getName()), attr.getValue());
 		}
 	}
@@ -61,8 +61,8 @@ class ResourceDocument {
 		return String.format("%s%s%s", qname, NAMESPACE_SEPARATOR, name);
 	}
 
-	private List<NodeValue> convertAttributes() {
-		List<NodeValue> values = new ArrayList<>();
+	private List<AuthorizationNodeValue> convertAttributes() {
+		List<AuthorizationNodeValue> values = new ArrayList<>();
 		for (String key : attributes.keySet()) {
 			String value = attributes.get(key);
 			values.add(convertAttribute(key, value));
@@ -71,12 +71,12 @@ class ResourceDocument {
 		return values;
 	}
 
-	private NodeValue convertAttribute(String attrName, String value) {
+	private AuthorizationNodeValue convertAttribute(String attrName, String value) {
 		if (attrName == null) {
 			throw new NullPointerException("attrName cannot be null");
 		}
 		String[] attrParts = attrName.split(NAMESPACE_SEPARATOR);
-		return new NodeValue(attrParts[0], attrParts[1], value);
+		return new AuthorizationNodeValue(attrParts[0], attrParts[1], value);
 
 	}
 
