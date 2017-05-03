@@ -2,10 +2,13 @@ package it.smartcommunitylab.aac.authorization;
 
 import java.util.Set;
 
+import org.springframework.stereotype.Service;
+
 import it.smartcommunitylab.aac.authorization.model.Node;
 import it.smartcommunitylab.aac.authorization.model.NodeAlreadyExist;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
+@Service
 public interface AuthSchemaHelper {
 
 	/**
