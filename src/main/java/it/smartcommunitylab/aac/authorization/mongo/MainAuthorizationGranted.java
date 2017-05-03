@@ -5,12 +5,10 @@ import java.util.List;
 
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.annotation.TypeAlias;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
 
-@Document(collection = "authGranted")
 @TypeAlias("mainAuthGranted")
 public class MainAuthorizationGranted extends AuthorizationGranted {
 

@@ -2,10 +2,10 @@ package it.smartcommunitylab.aac.authorization.mongo;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
 
-@Document(collection = "authGranted")
+@Document(collection = "authorizationGranted")
 abstract class AuthorizationGranted {
 	private String id;
 	private AuthorizationUser subject;

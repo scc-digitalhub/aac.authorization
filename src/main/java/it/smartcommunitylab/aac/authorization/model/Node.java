@@ -9,7 +9,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "authorizationSchema")
 public class Node {
 
 	public static final String ROOT_NODE_ATTRIBUTE = "root";
