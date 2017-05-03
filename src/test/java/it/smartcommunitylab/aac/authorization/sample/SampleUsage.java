@@ -21,7 +21,7 @@ public class SampleUsage {
 
 	private final static Logger logger = LoggerFactory.getLogger(SampleUsage.class);
 
-	public static void main(String[] args) throws NodeAlreadyExist {
+	public static void main(String[] args) {
 		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
 		ctx.register(Config.class);
 		ctx.register(MongoConfig.class);
@@ -31,7 +31,11 @@ public class SampleUsage {
 
 		Node nodeA = new Node("A");
 		nodeA.addParameter("a");
-		schemaHelper.addRootChild(nodeA);
+		try {
+			schemaHelper.addRootChild(nodeA);
+		} catch (NodeAlreadyExist e) {
+			// silence exception
+		}
 		AuthHelper authHelper = ctx.getBean(AuthHelper.class);
 		ctx.close();
 		Resource res = new Resource("A", Arrays.asList(new NodeValue("A", "a", "a_Value")));

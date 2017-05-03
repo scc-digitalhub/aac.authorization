@@ -2,6 +2,8 @@ package it.smartcommunitylab.aac.authorization.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class Authorization {
 	private String id;
@@ -64,6 +66,12 @@ public class Authorization {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(11, 35).append(subject).append(action).append(resource).append(entity).hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("subject", subject)
+				.append("action", action).append("resource", resource).append("entity", entity).build();
 	}
 
 }

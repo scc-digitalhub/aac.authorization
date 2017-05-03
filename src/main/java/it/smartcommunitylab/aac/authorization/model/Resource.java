@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class Resource {
 	private String qnameRef;
@@ -54,6 +56,12 @@ public class Resource {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(7, 21).append(qnameRef).append(values).hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("qnameRef", qnameRef)
+				.append("values", values).build();
 	}
 
 }

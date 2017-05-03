@@ -2,6 +2,8 @@ package it.smartcommunitylab.aac.authorization.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class AuthUser {
 	private String id;
@@ -38,6 +40,12 @@ public class AuthUser {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(5, 3).append(id).append(type).hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id).append("type", type)
+				.build();
 	}
 
 }

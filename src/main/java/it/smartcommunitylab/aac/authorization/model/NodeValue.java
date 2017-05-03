@@ -2,6 +2,8 @@ package it.smartcommunitylab.aac.authorization.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class NodeValue {
 	private NodeParameter definition;
@@ -40,6 +42,12 @@ public class NodeValue {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(11, 13).append(definition).append(value).hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("definition", definition)
+				.append("value", value).build();
 	}
 
 }
