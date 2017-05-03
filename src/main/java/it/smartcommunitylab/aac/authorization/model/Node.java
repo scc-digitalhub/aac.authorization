@@ -27,13 +27,6 @@ public class Node {
 	}
 
 
-	// public Node(String qname, final List<String> parameters) {
-	// this(qname);
-	// this.parameters.addAll(parameters.stream().map(n -> {
-	// return new NodeParameter(qname, n);
-	// }).collect(Collectors.toList()));
-	//
-	// }
 
 	@PersistenceConstructor
 	private Node(String qname, final List<NodeParameter> parameters) {
