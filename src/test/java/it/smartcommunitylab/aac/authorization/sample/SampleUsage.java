@@ -8,13 +8,14 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import it.smartcommunitylab.aac.authorization.AuthorizationHelper;
 import it.smartcommunitylab.aac.authorization.AuthorizationSchemaHelper;
+import it.smartcommunitylab.aac.authorization.NotValidResourceException;
 import it.smartcommunitylab.aac.authorization.config.Config;
 import it.smartcommunitylab.aac.authorization.config.MongoConfig;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
-import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExist;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeValue;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
 public class SampleUsage {
@@ -34,14 +35,18 @@ public class SampleUsage {
 		try {
 			schemaHelper.addRootChild(nodeA);
 		} catch (AuthorizationNodeAlreadyExist e) {
-			// silence exception
+			logger.error("authorization node already exists", e);
 		}
 		AuthorizationHelper authHelper = ctx.getBean(AuthorizationHelper.class);
 		ctx.close();
 		Resource res = new Resource("A", Arrays.asList(new AuthorizationNodeValue("A", "a", "a_Value")));
 		Authorization auth = new Authorization(new AuthorizationUser("sub", "type"), "act", res, new AuthorizationUser("id", "type"));
 
-		authHelper.insert(auth);
+		try {
+			authHelper.insert(auth);
+		} catch (NotValidResourceException e) {
+			logger.error("not valid resource", e);
+		}
 		logger.info("simple usage end");
 	}
 

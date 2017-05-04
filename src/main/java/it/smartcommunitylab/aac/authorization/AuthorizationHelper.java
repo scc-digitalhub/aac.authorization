@@ -11,19 +11,21 @@ public class AuthorizationHelper {
 	private final static Logger logger = LoggerFactory.getLogger(AuthorizationHelper.class);
 
 	@Autowired
-	private AuthorizationSchemaHelper policy;
+	private AuthorizationSchemaHelper authSchema;
 
 	@Autowired
 	private AuthorizationStorage storage;
 
-	public void insert(Authorization auth) {
+	public Authorization insert(Authorization auth) throws NotValidResourceException {
 
-		boolean isValidResource = policy.isValid(auth.getResource());
+		boolean isValidResource = authSchema.isValid(auth.getResource());
 		if (isValidResource) {
-			storage.insert(auth);
+			auth = storage.insert(auth);
 			logger.info("inserted authorization: {}", auth);
+			return auth;
 		} else {
 			logger.warn("tried to insert a not valid authorization: {}", auth);
+			throw new NotValidResourceException("resource in authorization is not valid");
 		}
 	}
 
