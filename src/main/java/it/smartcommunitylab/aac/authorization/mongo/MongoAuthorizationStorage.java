@@ -12,10 +12,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.stereotype.Component;
 
-import it.smartcommunitylab.aac.authorization.AuthorizationStorage;
 import it.smartcommunitylab.aac.authorization.AuthorizationSchemaHelper;
+import it.smartcommunitylab.aac.authorization.AuthorizationStorage;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeParam;
@@ -23,7 +22,6 @@ import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeValue;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 import it.smartcommunitylab.aac.authorization.mongo.ResourceDocument.AttributeDocument;
 
-@Component
 public class MongoAuthorizationStorage implements AuthorizationStorage {
 
 	@Autowired
