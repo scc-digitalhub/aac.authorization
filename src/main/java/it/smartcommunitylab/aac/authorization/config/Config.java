@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import it.smartcommunitylab.aac.authorization.AuthorizationHelper;
+import it.smartcommunitylab.aac.authorization.AuthorizationHelperImpl;
 import it.smartcommunitylab.aac.authorization.AuthorizationSchemaHelper;
 import it.smartcommunitylab.aac.authorization.AuthorizationStorage;
 import it.smartcommunitylab.aac.authorization.MongoAuthorizationSchemaHelper;
@@ -24,6 +25,6 @@ public class Config {
 
 	@Bean
 	public AuthorizationHelper authHelper() {
-		return new AuthorizationHelper();
+		return new AuthorizationHelperImpl();
 	}
 }

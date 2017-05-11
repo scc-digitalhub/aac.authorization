@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import it.smartcommunitylab.aac.authorization.AuthorizationHelper;
+import it.smartcommunitylab.aac.authorization.AuthorizationHelperImpl;
 import it.smartcommunitylab.aac.authorization.AuthorizationSchemaHelper;
 import it.smartcommunitylab.aac.authorization.NotValidResourceException;
 import it.smartcommunitylab.aac.authorization.config.Config;
@@ -37,7 +38,7 @@ public class SampleUsage {
 		} catch (AuthorizationNodeAlreadyExist e) {
 			logger.error("authorization node already exists", e);
 		}
-		AuthorizationHelper authHelper = ctx.getBean(AuthorizationHelper.class);
+		AuthorizationHelper authHelper = ctx.getBean(AuthorizationHelperImpl.class);
 		ctx.close();
 		Resource res = new Resource("A", Arrays.asList(new AuthorizationNodeValue("A", "a", "a_Value")));
 		Authorization auth = new Authorization(new AuthorizationUser("sub", "type"), "act", res, new AuthorizationUser("id", "type"));
