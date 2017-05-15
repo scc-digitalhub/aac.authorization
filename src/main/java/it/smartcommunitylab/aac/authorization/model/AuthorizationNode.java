@@ -28,8 +28,6 @@ public class AuthorizationNode {
 		this.qname = qname;
 	}
 
-	public AuthorizationNode() {
-	}
 
 	@PersistenceConstructor
 	private AuthorizationNode(String qname, final List<AuthorizationNodeParam> parameters) {
