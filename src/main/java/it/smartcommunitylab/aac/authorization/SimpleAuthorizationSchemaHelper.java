@@ -94,4 +94,22 @@ public class SimpleAuthorizationSchemaHelper implements AuthorizationSchemaHelpe
 	public AuthorizationNode getNode(String qname) {
 		return index.get(qname);
 	}
+
+	@Override
+	public AuthorizationSchemaHelper addChild(String parentQname, AuthorizationNode child)
+			throws AuthorizationNodeAlreadyExist {
+		return null;
+	}
+
+	@Override
+	public Set<AuthorizationNode> getChildren(String qName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<AuthorizationNode> getAllChildren(String qname) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

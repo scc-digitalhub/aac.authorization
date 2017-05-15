@@ -41,21 +41,7 @@ public class MongoAuthorizationSchemaHelper implements AuthorizationSchemaHelper
 
 	@Override
 	public AuthorizationSchemaHelper addChild(AuthorizationNode parent, AuthorizationNode child) throws AuthorizationNodeAlreadyExist {
-		Query q = new Query(Criteria.where("qname").is(parent.getQname()));
-		AuthorizationNode p = mongo.findOne(q, AuthorizationNode.class);
-		if (p != null) {
-			p = p.addChild(child);
-			child = child.addParent(p);
-			try {
-				mongo.insert(child);
-			} catch (DuplicateKeyException e) {
-				throw new AuthorizationNodeAlreadyExist();
-			}
-			Update ops = new Update();
-			ops.set("childrenNs", p.getChildren());
-			mongo.updateFirst(q, ops, AuthorizationNode.class);
-		}
-		return this;
+		return addChild(parent.getQname(), child);
 	}
 
 	@Override
@@ -75,23 +61,59 @@ public class MongoAuthorizationSchemaHelper implements AuthorizationSchemaHelper
 
 	@Override
 	public Set<AuthorizationNode> getChildren(AuthorizationNode node) {
-		AuthorizationNode n = getNode(node.getQname());
+		return getChildren(node.getQname());
+	}
+
+	@Override
+	public Set<AuthorizationNode> getAllChildren(AuthorizationNode node) {
+		return getAllChildren(node.getQname());
+	}
+
+	@Override
+	public AuthorizationNode getNode(String qname) {
+		Query q = new Query(Criteria.where("qname").is(qname));
+		return mongo.findOne(q, AuthorizationNode.class);
+	}
+
+	@Override
+	public AuthorizationSchemaHelper addChild(String parentQname, AuthorizationNode child)
+			throws AuthorizationNodeAlreadyExist {
+		Query q = new Query(Criteria.where("qname").is(parentQname));
+		AuthorizationNode p = mongo.findOne(q, AuthorizationNode.class);
+		if (p != null) {
+			p = p.addChild(child);
+			child = child.addParent(p);
+			try {
+				mongo.insert(child);
+			} catch (DuplicateKeyException e) {
+				throw new AuthorizationNodeAlreadyExist();
+			}
+			Update ops = new Update();
+			ops.set("childrenNs", p.getChildren());
+			mongo.updateFirst(q, ops, AuthorizationNode.class);
+		}
+		return this;
+	}
+
+	@Override
+	public Set<AuthorizationNode> getChildren(String qName) {
+		AuthorizationNode n = getNode(qName);
 		Set<AuthorizationNode> children = new HashSet<>();
 		if (n != null) {
-		n.getChildren().stream().forEach(childNs -> {
-			AuthorizationNode child = getNode(childNs);
-			if (child != null) {
-				children.add(child);
-			}
-		});
+			n.getChildren().stream().forEach(childNs -> {
+				AuthorizationNode child = getNode(childNs);
+				if (child != null) {
+					children.add(child);
+				}
+			});
 		}
 		return children;
 	}
 
 	@Override
-	public Set<AuthorizationNode> getAllChildren(AuthorizationNode node) {
+	public Set<AuthorizationNode> getAllChildren(String qname) {
 		Set<AuthorizationNode> allChildren = new LinkedHashSet<>();
-		Set<AuthorizationNode> directChildren = getChildren(node);
+		Set<AuthorizationNode> directChildren = getChildren(qname);
 		allChildren.addAll(directChildren);
 		Queue<AuthorizationNode> queue = new LinkedList<>();
 		queue.addAll(directChildren);
@@ -100,12 +122,6 @@ public class MongoAuthorizationSchemaHelper implements AuthorizationSchemaHelper
 			allChildren.addAll(getAllChildren(visit));
 		}
 		return allChildren;
-	}
-
-	@Override
-	public AuthorizationNode getNode(String qname) {
-		Query q = new Query(Criteria.where("qname").is(qname));
-		return mongo.findOne(q, AuthorizationNode.class);
 	}
 
 }

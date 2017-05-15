@@ -11,5 +11,7 @@ public interface AuthorizationStorage {
 
 	public void remove(Authorization auth);
 
+	public void remove(String authorizationId);
+
 	public boolean search(Authorization auth);
 }

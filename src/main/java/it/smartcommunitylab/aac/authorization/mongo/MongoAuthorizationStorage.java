@@ -86,17 +86,7 @@ public class MongoAuthorizationStorage implements AuthorizationStorage {
 
 	@Override
 	public void remove(Authorization auth) {
-		Query query = new Query(Criteria.where("id").is(auth.getId()));
-		MainAuthorizationGranted authGranted = mongo.findOne(query, MainAuthorizationGranted.class);
-		if (authGranted != null) {
-			// try to remove child auths
-			authGranted.getChildAuths().stream().forEach(child -> {
-				Query q = new Query(Criteria.where("id").is(child));
-				mongo.remove(q, ChildAuthorizationGranted.class);
-			});
-
-			mongo.remove(query, MainAuthorizationGranted.class);
-		}
+		remove(auth.getId());
 	}
 
 	@Override
@@ -113,6 +103,22 @@ public class MongoAuthorizationStorage implements AuthorizationStorage {
 		}
 		Query query = new Query(crit);
 		return mongo.exists(query, MainAuthorizationGranted.class);
+	}
+
+	@Override
+	public void remove(String authorizationId) {
+		Query query = new Query(Criteria.where("id").is(authorizationId));
+		MainAuthorizationGranted authGranted = mongo.findOne(query, MainAuthorizationGranted.class);
+		if (authGranted != null) {
+			// try to remove child auths
+			authGranted.getChildAuths().stream().forEach(child -> {
+				Query q = new Query(Criteria.where("id").is(child));
+				mongo.remove(q, ChildAuthorizationGranted.class);
+			});
+
+			mongo.remove(query, MainAuthorizationGranted.class);
+		}
+
 	}
 
 }

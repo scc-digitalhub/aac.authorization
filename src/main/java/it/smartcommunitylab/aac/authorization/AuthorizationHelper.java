@@ -11,6 +11,8 @@ public interface AuthorizationHelper {
 
 	void remove(Authorization auth);
 
+	void remove(String authorizationId);
+
 	boolean validate(Authorization auth);
 
 }

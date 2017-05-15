@@ -48,4 +48,11 @@ public class AuthorizationHelperImpl implements AuthorizationHelper {
 		return isAuthGranted;
 	}
 
+	@Override
+	public void remove(String authorizationId) {
+		storage.remove(authorizationId);
+		logger.info("removed authorization id: {}", authorizationId);
+
+	}
+
 }

@@ -21,6 +21,9 @@ public interface AuthorizationSchemaHelper {
 	 */
 	AuthorizationSchemaHelper addChild(AuthorizationNode parent, AuthorizationNode child) throws AuthorizationNodeAlreadyExist;
 
+	AuthorizationSchemaHelper addChild(String parentQname, AuthorizationNode child)
+			throws AuthorizationNodeAlreadyExist;
+
 	/**
 	 * Add a child to root node
 	 * 
@@ -35,6 +38,10 @@ public interface AuthorizationSchemaHelper {
 	Set<AuthorizationNode> getChildren(AuthorizationNode node);
 
 	Set<AuthorizationNode> getAllChildren(AuthorizationNode node);
+
+	Set<AuthorizationNode> getChildren(String qName);
+
+	Set<AuthorizationNode> getAllChildren(String qname);
 
 	AuthorizationNode getNode(String qname);
 

@@ -64,4 +64,9 @@ public class SimpleAuthorizationStorage implements AuthorizationStorage {
 		return new AuthorizationNodeValue(value.getDefinition().getQname(), value.getDefinition().getName(), AuthorizationNodeValue.ALL_VALUE);
 	}
 
+	@Override
+	public void remove(String authorizationId) {
+
+	}
+
 }
