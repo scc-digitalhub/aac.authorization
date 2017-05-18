@@ -11,8 +11,8 @@ public class AuthorizationNodeValue {
 
 	public static final String ALL_VALUE = "*";
 
-	public AuthorizationNodeValue(String qname, String name, String value) {
-		definition = new AuthorizationNodeParam(qname, name);
+	public AuthorizationNodeValue(FQname fqname, String name, String value) {
+		definition = new AuthorizationNodeParam(fqname, name);
 		this.value = value;
 	}
 

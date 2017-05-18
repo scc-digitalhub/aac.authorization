@@ -5,9 +5,10 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 
-import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeValue;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
+import it.smartcommunitylab.aac.authorization.model.FQname;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
 public class SimpleAuthorizationStorageTest {
@@ -16,12 +17,14 @@ public class SimpleAuthorizationStorageTest {
 	public void insertFirstAuthorization() {
 		AuthorizationStorage storage = new SimpleAuthorizationStorage(new SimpleAuthorizationSchemaHelper());
 
-		Resource res = new Resource("A", Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
+		Resource res = new Resource(new FQname("domain", "A"),
+				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
 		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		storage.insert(new Authorization(subject, "action", res, entity));
 
-		Resource res1 = new Resource("A", Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
+		Resource res1 = new Resource(new FQname("domain", "A"),
+				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
 		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 
 		Assert.assertEquals(storage.search(new Authorization(subject, "action", res1, entity1)), true);
@@ -32,7 +35,8 @@ public class SimpleAuthorizationStorageTest {
 	public void searchNotExistentAuthWithEmptyStorage() {
 		AuthorizationStorage storage = new SimpleAuthorizationStorage(new SimpleAuthorizationSchemaHelper());
 
-		Resource res1 = new Resource("A", Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
+		Resource res1 = new Resource(new FQname("domain", "A"),
+				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
 		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 
@@ -44,12 +48,14 @@ public class SimpleAuthorizationStorageTest {
 	public void searchNotExistentAuthWithPopulatedStorage() {
 		AuthorizationStorage storage = new SimpleAuthorizationStorage(new SimpleAuthorizationSchemaHelper());
 
-		Resource res = new Resource("A", Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
+		Resource res = new Resource(new FQname("domain", "A"),
+				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
 		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		storage.insert(new Authorization(subject, "action", res, entity));
 
-		Resource res1 = new Resource("B", Arrays.asList(new AuthorizationNodeValue("B", "a", "a_value")));
+		Resource res1 = new Resource(new FQname("domain", "B"),
+				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "B"), "a", "a_value")));
 		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 
 		Assert.assertEquals(storage.search(new Authorization(subject, "action", res1, entity1)), false);
@@ -60,7 +66,8 @@ public class SimpleAuthorizationStorageTest {
 	public void removePresentAuth() {
 		AuthorizationStorage storage = new SimpleAuthorizationStorage(new SimpleAuthorizationSchemaHelper());
 
-		Resource res = new Resource("A", Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
+		Resource res = new Resource(new FQname("domain", "A"),
+				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
 		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
@@ -75,7 +82,8 @@ public class SimpleAuthorizationStorageTest {
 	public void removeNotPresentAuth() {
 		AuthorizationStorage storage = new SimpleAuthorizationStorage(new SimpleAuthorizationSchemaHelper());
 
-		Resource res = new Resource("A", Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
+		Resource res = new Resource(new FQname("domain", "A"),
+				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
 		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
@@ -93,13 +101,15 @@ public class SimpleAuthorizationStorageTest {
 	public void searchOnWildcardAuthorization() {
 		AuthorizationStorage storage = new SimpleAuthorizationStorage(new SimpleAuthorizationSchemaHelper());
 
-		Resource res = new Resource("A", Arrays.asList(new AuthorizationNodeValue("A", "a", AuthorizationNodeValue.ALL_VALUE)));
+		Resource res = new Resource(new FQname("domain", "A"), Arrays
+				.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", AuthorizationNodeValue.ALL_VALUE)));
 		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
 		storage.insert(auth1);
 
-		Resource res1 = new Resource("A", Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
+		Resource res1 = new Resource(new FQname("domain", "A"),
+				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
 		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 		Authorization authToFind = new Authorization(subject, "action", res1, entity1);
 

@@ -9,16 +9,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class Resource {
-	private String qnameRef;
+	private FQname fqnameRef;
 	private List<AuthorizationNodeValue> values;
 
-	public Resource(String qnameRef, List<AuthorizationNodeValue> values) {
-		this.qnameRef = qnameRef;
+	public Resource(FQname fqnameRef, List<AuthorizationNodeValue> values) {
+		this.fqnameRef = fqnameRef;
 		this.values = new ArrayList<>(values);
 	}
 
 	public boolean isInstanceOf(AuthorizationNode node) {
-		return qnameRef.equals(node.getQname()) && checkLogicalEquivalence(node.getParameters(), values);
+		return fqnameRef.equals(node.getFqname()) && checkLogicalEquivalence(node.getParameters(), values);
 	}
 
 	private boolean checkLogicalEquivalence(List<AuthorizationNodeParam> s1, List<AuthorizationNodeValue> s2) {
@@ -30,8 +30,8 @@ public class Resource {
 		return true;
 	}
 
-	public String getQnameRef() {
-		return qnameRef;
+	public FQname getFqnameRef() {
+		return fqnameRef;
 	}
 
 	public List<AuthorizationNodeValue> getValues() {
@@ -50,17 +50,17 @@ public class Resource {
 			return false;
 		}
 		Resource rhs = (Resource) obj;
-		return new EqualsBuilder().append(qnameRef, rhs.qnameRef).append(values, rhs.values).isEquals();
+		return new EqualsBuilder().append(fqnameRef, rhs.fqnameRef).append(values, rhs.values).isEquals();
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(7, 21).append(qnameRef).append(values).hashCode();
+		return new HashCodeBuilder(7, 21).append(fqnameRef).append(values).hashCode();
 	}
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("qnameRef", qnameRef)
+		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("fqnameRef", fqnameRef)
 				.append("values", values).build();
 	}
 

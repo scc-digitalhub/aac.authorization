@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExist;
+import it.smartcommunitylab.aac.authorization.model.FQname;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
 public class MongoAuthorizationSchemaHelper implements AuthorizationSchemaHelper {
@@ -28,7 +29,8 @@ public class MongoAuthorizationSchemaHelper implements AuthorizationSchemaHelper
 
 	@PostConstruct
 	private void init() {
-		root = mongo.findOne(new Query(Criteria.where("qname").is(AuthorizationNode.ROOT_NODE_ATTRIBUTE)), AuthorizationNode.class);
+		root = mongo.findOne(new Query(Criteria.where("fqname").is(AuthorizationNode.ROOT_NODE_ATTRIBUTE)),
+				AuthorizationNode.class);
 		if (root == null) {
 			root = createRootNode();
 			mongo.insert(root);
@@ -41,7 +43,7 @@ public class MongoAuthorizationSchemaHelper implements AuthorizationSchemaHelper
 
 	@Override
 	public AuthorizationSchemaHelper addChild(AuthorizationNode parent, AuthorizationNode child) throws AuthorizationNodeAlreadyExist {
-		return addChild(parent.getQname(), child);
+		return addChild(parent.getFqname(), child);
 	}
 
 	@Override
@@ -51,7 +53,7 @@ public class MongoAuthorizationSchemaHelper implements AuthorizationSchemaHelper
 
 	@Override
 	public boolean isValid(Resource res) {
-		AuthorizationNode n = getNode(res.getQnameRef());
+		AuthorizationNode n = getNode(res.getFqnameRef());
 		if (n != null) {
 			return res.isInstanceOf(n);
 		}
@@ -61,24 +63,24 @@ public class MongoAuthorizationSchemaHelper implements AuthorizationSchemaHelper
 
 	@Override
 	public Set<AuthorizationNode> getChildren(AuthorizationNode node) {
-		return getChildren(node.getQname());
+		return getChildren(node.getFqname());
 	}
 
 	@Override
 	public Set<AuthorizationNode> getAllChildren(AuthorizationNode node) {
-		return getAllChildren(node.getQname());
+		return getAllChildren(node.getFqname());
 	}
 
 	@Override
-	public AuthorizationNode getNode(String qname) {
-		Query q = new Query(Criteria.where("qname").is(qname));
+	public AuthorizationNode getNode(FQname fqname) {
+		Query q = new Query(Criteria.where("fqname").is(fqname));
 		return mongo.findOne(q, AuthorizationNode.class);
 	}
 
 	@Override
-	public AuthorizationSchemaHelper addChild(String parentQname, AuthorizationNode child)
+	public AuthorizationSchemaHelper addChild(FQname parentFQname, AuthorizationNode child)
 			throws AuthorizationNodeAlreadyExist {
-		Query q = new Query(Criteria.where("qname").is(parentQname));
+		Query q = new Query(Criteria.where("fqname").is(parentFQname));
 		AuthorizationNode p = mongo.findOne(q, AuthorizationNode.class);
 		if (p != null) {
 			p = p.addChild(child);
@@ -96,7 +98,7 @@ public class MongoAuthorizationSchemaHelper implements AuthorizationSchemaHelper
 	}
 
 	@Override
-	public Set<AuthorizationNode> getChildren(String qName) {
+	public Set<AuthorizationNode> getChildren(FQname qName) {
 		AuthorizationNode n = getNode(qName);
 		Set<AuthorizationNode> children = new HashSet<>();
 		if (n != null) {
@@ -111,7 +113,7 @@ public class MongoAuthorizationSchemaHelper implements AuthorizationSchemaHelper
 	}
 
 	@Override
-	public Set<AuthorizationNode> getAllChildren(String qname) {
+	public Set<AuthorizationNode> getAllChildren(FQname qname) {
 		Set<AuthorizationNode> allChildren = new LinkedHashSet<>();
 		Set<AuthorizationNode> directChildren = getChildren(qname);
 		allChildren.addAll(directChildren);

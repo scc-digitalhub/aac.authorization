@@ -9,19 +9,20 @@ import org.junit.Test;
 
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExist;
+import it.smartcommunitylab.aac.authorization.model.FQname;
 
-public class AuthorizationSchemaHelperTest {
+public class SimpleAuthorizationSchemaHelperTest {
 
 
 	@Test
 	public void allChildren() throws AuthorizationNodeAlreadyExist {
 		AuthorizationSchemaHelper p = new SimpleAuthorizationSchemaHelper();
-		AuthorizationNode node1 = new AuthorizationNode("A");
-		AuthorizationNode node2 = new AuthorizationNode("B");
-		AuthorizationNode node3 = new AuthorizationNode("C");
-		AuthorizationNode node4 = new AuthorizationNode("D");
-		AuthorizationNode node5 = new AuthorizationNode("E");
-		AuthorizationNode node6 = new AuthorizationNode("F");
+		AuthorizationNode node1 = new AuthorizationNode(new FQname("domain", "A"));
+		AuthorizationNode node2 = new AuthorizationNode(new FQname("domain", "B"));
+		AuthorizationNode node3 = new AuthorizationNode(new FQname("domain", "C"));
+		AuthorizationNode node4 = new AuthorizationNode(new FQname("domain", "D"));
+		AuthorizationNode node5 = new AuthorizationNode(new FQname("domain", "E"));
+		AuthorizationNode node6 = new AuthorizationNode(new FQname("domain", "F"));
 		p.addRootChild(node1);
 		p.addRootChild(node6);
 		p.addChild(node1, node2);
@@ -36,14 +37,14 @@ public class AuthorizationSchemaHelperTest {
 	@Test
 	public void getAllChildren() throws AuthorizationNodeAlreadyExist {
 		AuthorizationSchemaHelper authSchema = new SimpleAuthorizationSchemaHelper();
-		AuthorizationNode nodeA = new AuthorizationNode("A");
+		AuthorizationNode nodeA = new AuthorizationNode(new FQname("domain", "A"));
 		authSchema.addRootChild(nodeA);
-		AuthorizationNode nodeB = new AuthorizationNode("B");
+		AuthorizationNode nodeB = new AuthorizationNode(new FQname("domain", "B"));
 		authSchema.addChild(nodeA, nodeB);
 
-		AuthorizationNode nodeC = new AuthorizationNode("C");
-		AuthorizationNode nodeD = new AuthorizationNode("D");
-		AuthorizationNode nodeE = new AuthorizationNode("E");
+		AuthorizationNode nodeC = new AuthorizationNode(new FQname("domain", "C"));
+		AuthorizationNode nodeD = new AuthorizationNode(new FQname("domain", "D"));
+		AuthorizationNode nodeE = new AuthorizationNode(new FQname("domain", "E"));
 
 		authSchema.addChild(nodeB, nodeC).addChild(nodeB, nodeD).addChild(nodeC, nodeE);
 
@@ -54,7 +55,7 @@ public class AuthorizationSchemaHelperTest {
 	@Test(expected = AuthorizationNodeAlreadyExist.class)
 	public void nodeAlreadyExist() throws AuthorizationNodeAlreadyExist {
 		AuthorizationSchemaHelper authSchema = new SimpleAuthorizationSchemaHelper();
-		AuthorizationNode nodeA = new AuthorizationNode("A");
+		AuthorizationNode nodeA = new AuthorizationNode(new FQname("domain", "A"));
 		authSchema.addRootChild(nodeA);
 		authSchema.addChild(nodeA, nodeA);
 	}
@@ -62,24 +63,24 @@ public class AuthorizationSchemaHelperTest {
 	@Test
 	public void addRootChild() throws AuthorizationNodeAlreadyExist {
 		AuthorizationSchemaHelper authSchema = new SimpleAuthorizationSchemaHelper();
-		AuthorizationNode node = new AuthorizationNode("A");
-		Assert.assertNull(authSchema.getNode("A"));
+		AuthorizationNode node = new AuthorizationNode(new FQname("domain", "A"));
+		Assert.assertNull(authSchema.getNode(new FQname("domain", "A")));
 		authSchema.addRootChild(node);
-		Assert.assertNotNull(authSchema.getNode("A"));
+		Assert.assertNotNull(authSchema.getNode(new FQname("domain", "A")));
 	}
 
 	@Test
 	public void addSecondLevelChild() throws AuthorizationNodeAlreadyExist {
 		AuthorizationSchemaHelper authSchema = new SimpleAuthorizationSchemaHelper();
-		AuthorizationNode nodeA = new AuthorizationNode("A");
+		AuthorizationNode nodeA = new AuthorizationNode(new FQname("domain", "A"));
 		authSchema.addRootChild(nodeA);
-		AuthorizationNode nodeB = new AuthorizationNode("B");
+		AuthorizationNode nodeB = new AuthorizationNode(new FQname("domain", "B"));
 		authSchema.addChild(nodeA, nodeB);
 
-		Assert.assertNotNull(authSchema.getNode("B"));
+		Assert.assertNotNull(authSchema.getNode(new FQname("domain", "B")));
 		Set<AuthorizationNode> children = authSchema.getChildren(nodeA);
 		Assert.assertEquals(1, children.size());
-		Assert.assertEquals("B", children.iterator().next().getQname());
+		Assert.assertEquals(new FQname("domain", "B"), children.iterator().next().getFqname());
 	}
 
 

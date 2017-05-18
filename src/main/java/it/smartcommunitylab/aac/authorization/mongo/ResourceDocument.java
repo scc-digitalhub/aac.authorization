@@ -11,30 +11,31 @@ import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeValue;
+import it.smartcommunitylab.aac.authorization.model.FQname;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
 class ResourceDocument {
-	private String qname;
+	private FQname fqname;
 
 	@Field("attrs")
 	private Map<String, String> attributes = new HashMap<>();
 
 	private static final String NAMESPACE_SEPARATOR = "#";
 
-	public ResourceDocument(String qname) {
-		this.qname = qname;
+	public ResourceDocument(FQname fqname) {
+		this.fqname = fqname;
 	}
 
 	public ResourceDocument(Resource resource) {
 		if (resource != null) {
-			qname = resource.getQnameRef();
+			fqname = resource.getFqnameRef();
 			addAllAttributes(resource.getValues());
 		}
 	}
 
 	@PersistenceConstructor
-	private ResourceDocument(String qname, Map<String, String> attributes) {
-		this.qname = qname;
+	private ResourceDocument(FQname fqname, Map<String, String> attributes) {
+		this.fqname = fqname;
 		this.attributes = attributes;
 	}
 
@@ -50,15 +51,16 @@ class ResourceDocument {
 
 	public void addAllAttributes(Collection<AuthorizationNodeValue> attributes) {
 		for (AuthorizationNodeValue attr : attributes) {
-			addAttribute(getAttrName(attr.getDefinition().getQname(), attr.getDefinition().getName()), attr.getValue());
+			addAttribute(getAttrName(attr.getDefinition().getFQname(), attr.getDefinition().getName()),
+					attr.getValue());
 		}
 	}
 
-	private String getAttrName(String qname, String name) {
-		if (qname == null || name == null) {
+	private String getAttrName(FQname fqname, String name) {
+		if (fqname == null || name == null) {
 			throw new NullPointerException("attribute name parts cannot be null");
 		}
-		return String.format("%s%s%s", qname, NAMESPACE_SEPARATOR, name);
+		return String.format("%s%s%s", fqname.getQname(), NAMESPACE_SEPARATOR, name);
 	}
 
 	private List<AuthorizationNodeValue> convertAttributes() {
@@ -76,12 +78,12 @@ class ResourceDocument {
 			throw new NullPointerException("attrName cannot be null");
 		}
 		String[] attrParts = attrName.split(NAMESPACE_SEPARATOR);
-		return new AuthorizationNodeValue(attrParts[0], attrParts[1], value);
+		return new AuthorizationNodeValue(new FQname(fqname.getDomain(), attrParts[0]), attrParts[1], value);
 
 	}
 
-	public final String getQname() {
-		return qname;
+	public final FQname getFqname() {
+		return fqname;
 	}
 
 	public final Collection<AttributeDocument> getAttributes() {
@@ -93,7 +95,7 @@ class ResourceDocument {
 	}
 
 	public Resource toResource() {
-		return new Resource(qname, convertAttributes());
+		return new Resource(fqname, convertAttributes());
 
 	}
 

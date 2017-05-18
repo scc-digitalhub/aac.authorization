@@ -10,6 +10,7 @@ import java.util.Set;
 
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExist;
+import it.smartcommunitylab.aac.authorization.model.FQname;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
 public class SimpleAuthorizationSchemaHelper implements AuthorizationSchemaHelper {
@@ -17,7 +18,7 @@ public class SimpleAuthorizationSchemaHelper implements AuthorizationSchemaHelpe
 
 	private Set<String> nid = new HashSet<>();
 
-	private Map<String, AuthorizationNode> index = new HashMap<>();
+	private Map<FQname, AuthorizationNode> index = new HashMap<>();
 
 	public SimpleAuthorizationSchemaHelper() {
 		root = new AuthorizationNode(AuthorizationNode.ROOT_NODE_ATTRIBUTE);
@@ -33,10 +34,10 @@ public class SimpleAuthorizationSchemaHelper implements AuthorizationSchemaHelpe
 	 */
 	@Override
 	public AuthorizationSchemaHelper addChild(AuthorizationNode parent, AuthorizationNode child) throws AuthorizationNodeAlreadyExist {
-		if (!index.containsKey(child.getQname())) {
+		if (!index.containsKey(child.getFqname())) {
 			parent = parent.addChild(child);
 			child = child.addParent(parent);
-			index.put(child.getQname(), child);
+			index.put(child.getFqname(), child);
 		} else {
 			throw new AuthorizationNodeAlreadyExist();
 		}
@@ -60,7 +61,7 @@ public class SimpleAuthorizationSchemaHelper implements AuthorizationSchemaHelpe
 		if (res == null) {
 			throw new NullPointerException("resource cannot be null");
 		}
-		AuthorizationNode ref = getNode(res.getQnameRef());
+		AuthorizationNode ref = getNode(res.getFqnameRef());
 		return ref != null && res.isInstanceOf(ref);
 	}
 
@@ -91,24 +92,24 @@ public class SimpleAuthorizationSchemaHelper implements AuthorizationSchemaHelpe
 	}
 
 	@Override
-	public AuthorizationNode getNode(String qname) {
+	public AuthorizationNode getNode(FQname qname) {
 		return index.get(qname);
 	}
 
 	@Override
-	public AuthorizationSchemaHelper addChild(String parentQname, AuthorizationNode child)
+	public AuthorizationSchemaHelper addChild(FQname parentQname, AuthorizationNode child)
 			throws AuthorizationNodeAlreadyExist {
 		return null;
 	}
 
 	@Override
-	public Set<AuthorizationNode> getChildren(String qName) {
+	public Set<AuthorizationNode> getChildren(FQname qName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Set<AuthorizationNode> getAllChildren(String qname) {
+	public Set<AuthorizationNode> getAllChildren(FQname qname) {
 		// TODO Auto-generated method stub
 		return null;
 	}

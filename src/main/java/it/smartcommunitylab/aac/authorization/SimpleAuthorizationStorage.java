@@ -55,13 +55,14 @@ public class SimpleAuthorizationStorage implements AuthorizationStorage {
 		List<AuthorizationNodeValue> values = res.getValues();
 		AuthorizationNodeValue removed = values.remove(values.size() - 1);
 		values.add(createNodeValueAll(removed));
-		Resource depRes = new Resource(res.getQnameRef(), values);
+		Resource depRes = new Resource(res.getFqnameRef(), values);
 		return Arrays.asList(depRes);
 
 	}
 
 	public AuthorizationNodeValue createNodeValueAll(AuthorizationNodeValue value) {
-		return new AuthorizationNodeValue(value.getDefinition().getQname(), value.getDefinition().getName(), AuthorizationNodeValue.ALL_VALUE);
+		return new AuthorizationNodeValue(value.getDefinition().getFQname(), value.getDefinition().getName(),
+				AuthorizationNodeValue.ALL_VALUE);
 	}
 
 	@Override

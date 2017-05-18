@@ -7,66 +7,66 @@ import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "authorizationSchema")
 public class AuthorizationNode {
 
-	public static final String ROOT_NODE_ATTRIBUTE = "root";
+	public static final FQname ROOT_NODE_ATTRIBUTE = new FQname("*", "root");
 
-	@Id
-	private String qname;
+	private String id;
+
+	private FQname fqname;
 
 	private List<AuthorizationNodeParam> parameters = new ArrayList<>();
 
-	private Set<String> parentNs = new HashSet<>();
-	private Set<String> childrenNs = new HashSet<>();
+	private Set<FQname> parentNs = new HashSet<>();
+	private Set<FQname> childrenNs = new HashSet<>();
 
-	public AuthorizationNode(String qname) {
-		this.qname = qname;
+	public AuthorizationNode(FQname fqname) {
+		this.fqname = fqname;
 	}
 
 
 	@PersistenceConstructor
-	private AuthorizationNode(String qname, final List<AuthorizationNodeParam> parameters) {
-		this(qname);
+	private AuthorizationNode(FQname fqname, final List<AuthorizationNodeParam> parameters) {
+		this(fqname);
 		this.parameters.addAll(parameters);
 	}
 
-	public AuthorizationNode(String qname, String parameter) {
-		this(qname);
-		this.parameters.add(new AuthorizationNodeParam(qname, parameter));
+	public AuthorizationNode(FQname fqname, String parameter) {
+		this(fqname);
+		this.parameters.add(new AuthorizationNodeParam(fqname, parameter));
 	}
 
 	public AuthorizationNode addChild(AuthorizationNode node) {
-		childrenNs.add(node.getQname());
+		childrenNs.add(node.getFqname());
 		return this;
 	}
 
 	public AuthorizationNode addParent(AuthorizationNode node) {
-		parentNs.add(node.getQname());
+		parentNs.add(node.getFqname());
 		parameters.addAll(node.parameters);
 		return this;
 	}
 
 	public AuthorizationNode addParameter(String param) {
-		parameters.add(new AuthorizationNodeParam(qname, param));
+		parameters.add(new AuthorizationNodeParam(fqname, param));
 		return this;
 	}
 
 	public boolean isRoot() {
-		return ROOT_NODE_ATTRIBUTE.equals(qname);
+		return ROOT_NODE_ATTRIBUTE.equals(fqname);
 	}
 
-	public Set<String> getChildren() {
+	public Set<FQname> getChildren() {
 		return childrenNs;
 	}
 
 
-	public String getQname() {
-		return qname;
+	public FQname getFqname() {
+		return fqname;
 	}
 
 	public List<AuthorizationNodeParam> getParameters() {
@@ -75,7 +75,7 @@ public class AuthorizationNode {
 
 	@Override
 	public String toString() {
-		return qname;
+		return fqname.toString();
 	}
 
 	@Override
@@ -90,12 +90,13 @@ public class AuthorizationNode {
 			return false;
 		}
 		AuthorizationNode rhs = (AuthorizationNode) obj;
-		return new EqualsBuilder().append(qname, rhs.qname).isEquals();
+		return new EqualsBuilder().append(fqname, rhs.fqname).isEquals();
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(77, 3).append(qname).hashCode();
+		return new HashCodeBuilder(77, 3).append(fqname).hashCode();
 	}
+
 
 }

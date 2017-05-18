@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExist;
+import it.smartcommunitylab.aac.authorization.model.FQname;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
 @Service
@@ -21,7 +22,7 @@ public interface AuthorizationSchemaHelper {
 	 */
 	AuthorizationSchemaHelper addChild(AuthorizationNode parent, AuthorizationNode child) throws AuthorizationNodeAlreadyExist;
 
-	AuthorizationSchemaHelper addChild(String parentQname, AuthorizationNode child)
+	AuthorizationSchemaHelper addChild(FQname parentQname, AuthorizationNode child)
 			throws AuthorizationNodeAlreadyExist;
 
 	/**
@@ -39,10 +40,10 @@ public interface AuthorizationSchemaHelper {
 
 	Set<AuthorizationNode> getAllChildren(AuthorizationNode node);
 
-	Set<AuthorizationNode> getChildren(String qName);
+	Set<AuthorizationNode> getChildren(FQname qName);
 
-	Set<AuthorizationNode> getAllChildren(String qname);
+	Set<AuthorizationNode> getAllChildren(FQname qname);
 
-	AuthorizationNode getNode(String qname);
+	AuthorizationNode getNode(FQname qname);
 
 }

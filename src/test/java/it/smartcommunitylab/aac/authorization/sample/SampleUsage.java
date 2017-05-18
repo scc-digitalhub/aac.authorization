@@ -17,6 +17,7 @@ import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExist;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeValue;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
+import it.smartcommunitylab.aac.authorization.model.FQname;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 
 public class SampleUsage {
@@ -31,7 +32,7 @@ public class SampleUsage {
 
 		AuthorizationSchemaHelper schemaHelper = ctx.getBean(AuthorizationSchemaHelper.class);
 
-		AuthorizationNode nodeA = new AuthorizationNode("A");
+		AuthorizationNode nodeA = new AuthorizationNode(new FQname("domain", "A"));
 		nodeA.addParameter("a");
 		try {
 			schemaHelper.addRootChild(nodeA);
@@ -40,7 +41,8 @@ public class SampleUsage {
 		}
 		AuthorizationHelper authHelper = ctx.getBean(AuthorizationHelperImpl.class);
 		ctx.close();
-		Resource res = new Resource("A", Arrays.asList(new AuthorizationNodeValue("A", "a", "a_Value")));
+		Resource res = new Resource(new FQname("domain", "A"),
+				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_Value")));
 		Authorization auth = new Authorization(new AuthorizationUser("sub", "type"), "act", res, new AuthorizationUser("id", "type"));
 
 		try {

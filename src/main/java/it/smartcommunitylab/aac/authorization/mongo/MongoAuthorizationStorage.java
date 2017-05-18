@@ -39,7 +39,7 @@ public class MongoAuthorizationStorage implements AuthorizationStorage {
 		MainAuthorizationGranted authGranted = new MainAuthorizationGranted(auth);
 		mongo.insert(authGranted);
 
-		AuthorizationNode nodeDefinition = authSchema.getNode(auth.getResource().getQnameRef());
+		AuthorizationNode nodeDefinition = authSchema.getNode(auth.getResource().getFqnameRef());
 		if (nodeDefinition != null) {
 			Set<AuthorizationNode> allChildren = authSchema.getAllChildren(nodeDefinition);
 			allChildren.stream().forEach(childNodeDefinition -> {
@@ -78,9 +78,10 @@ public class MongoAuthorizationStorage implements AuthorizationStorage {
 		List<AuthorizationNodeParam> toAssign = (List<AuthorizationNodeParam>) CollectionUtils
 				.subtract(childNodeDefinition.getParameters(), definitions);
 		toAssign.stream().forEach(assign -> {
-			childValues.add(new AuthorizationNodeValue(assign.getQname(), assign.getName(), AuthorizationNodeValue.ALL_VALUE));
+			childValues.add(
+					new AuthorizationNodeValue(assign.getFQname(), assign.getName(), AuthorizationNodeValue.ALL_VALUE));
 		});
-		return new Resource(childNodeDefinition.getQname(), childValues);
+		return new Resource(childNodeDefinition.getFqname(), childValues);
 
 	}
 
@@ -97,7 +98,7 @@ public class MongoAuthorizationStorage implements AuthorizationStorage {
 		crit.and("action").is(authGranted.getAction());
 		crit.and("entity.id").is(authGranted.getEntity().getId());
 		crit.and("entity.type").is(authGranted.getEntity().getType());
-		crit.and("resource.qname").is(authGranted.getResource().getQname());
+		crit.and("resource.fqname").is(authGranted.getResource().getFqname());
 		for (AttributeDocument attr : authGranted.getResource().getAttributes()) {
 			crit.and("resource.attrs." + attr.getName()).in(Arrays.asList(attr.getValue(), AuthorizationNodeValue.ALL_VALUE));
 		}
