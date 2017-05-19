@@ -96,8 +96,7 @@ public class MongoAuthorizationStorage implements AuthorizationStorage {
 		Criteria crit = Criteria.where("subject");
 		crit.is(auth.getSubject());
 		crit.and("action").is(authGranted.getAction());
-		crit.and("entity.id").is(authGranted.getEntity().getId());
-		crit.and("entity.type").is(authGranted.getEntity().getType());
+		crit.and("entity").is(authGranted.getEntity());
 		crit.and("resource.fqname").is(authGranted.getResource().getFqname());
 		for (AttributeDocument attr : authGranted.getResource().getAttributes()) {
 			crit.and("resource.attrs." + attr.getName()).in(Arrays.asList(attr.getValue(), AuthorizationNodeValue.ALL_VALUE));
