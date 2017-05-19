@@ -41,9 +41,9 @@ public class AuthorizationHelperImpl implements AuthorizationHelper {
 	public boolean validate(Authorization auth) {
 		boolean isAuthGranted = storage.search(auth);
 		if (isAuthGranted) {
-			logger.info("authorization is granted: {}");
+			logger.info("authorization is granted: {}", auth);
 		} else {
-			logger.info("authorization is not granted: {}");
+			logger.info("authorization is not granted: {}", auth);
 		}
 		return isAuthGranted;
 	}
