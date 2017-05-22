@@ -60,16 +60,16 @@ public class AuthorizationNode {
 		return ROOT_NODE_ATTRIBUTE.equals(fqname);
 	}
 
-	public Set<FQname> getChildren() {
+	public final Set<FQname> getChildren() {
 		return childrenNs;
 	}
 
 
-	public FQname getFqname() {
+	public final FQname getFqname() {
 		return fqname;
 	}
 
-	public List<AuthorizationNodeParam> getParameters() {
+	public final List<AuthorizationNodeParam> getParameters() {
 		return parameters;
 	}
 

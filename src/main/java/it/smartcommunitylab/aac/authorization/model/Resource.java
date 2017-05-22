@@ -34,7 +34,7 @@ public class Resource {
 		return fqnameRef;
 	}
 
-	public List<AuthorizationNodeValue> getValues() {
+	public final List<AuthorizationNodeValue> getValues() {
 		return values;
 	}
 
