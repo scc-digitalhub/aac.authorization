@@ -78,8 +78,7 @@ public class MongoAuthorizationSchemaHelperTest {
 		nodeA.addParameter("n");
 		authSchema.addRootChild(nodeA);
 		Assert.assertEquals(
-				Arrays.asList(new AuthorizationNodeParam(new FQname("domain", "A"), "a"),
-						new AuthorizationNodeParam(new FQname("domain", "A"), "n")),
+				Arrays.asList(new AuthorizationNodeParam("A", "a"), new AuthorizationNodeParam("A", "n")),
 				authSchema.getNode(new FQname("domain", "A")).getParameters());
 
 	}

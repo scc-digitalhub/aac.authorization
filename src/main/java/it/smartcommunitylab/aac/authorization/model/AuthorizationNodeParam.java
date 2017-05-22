@@ -6,16 +6,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class AuthorizationNodeParam {
-	private FQname fqname;
+	private String qname;
 	private String name;
 
-	public AuthorizationNodeParam(FQname fqname, String name) {
-		this.fqname = fqname;
+	public AuthorizationNodeParam(String qname, String name) {
+		this.qname = qname;
 		this.name = name;
 	}
 
-	public FQname getFQname() {
-		return fqname;
+	public String getQname() {
+		return qname;
 	}
 
 	public String getName() {
@@ -34,17 +34,17 @@ public class AuthorizationNodeParam {
 			return false;
 		}
 		AuthorizationNodeParam rhs = (AuthorizationNodeParam) obj;
-		return new EqualsBuilder().append(fqname, rhs.fqname).append(name, rhs.name).isEquals();
+		return new EqualsBuilder().append(qname, rhs.qname).append(name, rhs.name).isEquals();
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(89, 15).append(fqname).append(name).hashCode();
+		return new HashCodeBuilder(89, 15).append(qname).append(name).hashCode();
 	}
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("fqname", fqname).append("name", name)
+		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("qname", qname).append("name", name)
 				.build();
 	}
 

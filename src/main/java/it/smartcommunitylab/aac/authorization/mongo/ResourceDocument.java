@@ -51,16 +51,16 @@ class ResourceDocument {
 
 	public void addAllAttributes(Collection<AuthorizationNodeValue> attributes) {
 		for (AuthorizationNodeValue attr : attributes) {
-			addAttribute(getAttrName(attr.getDefinition().getFQname(), attr.getDefinition().getName()),
+			addAttribute(getAttrName(attr.getDefinition().getQname(), attr.getDefinition().getName()),
 					attr.getValue());
 		}
 	}
 
-	private String getAttrName(FQname fqname, String name) {
+	private String getAttrName(String qname, String name) {
 		if (fqname == null || name == null) {
 			throw new NullPointerException("attribute name parts cannot be null");
 		}
-		return String.format("%s%s%s", fqname.getQname(), NAMESPACE_SEPARATOR, name);
+		return String.format("%s%s%s", qname, NAMESPACE_SEPARATOR, name);
 	}
 
 	private List<AuthorizationNodeValue> convertAttributes() {
@@ -78,7 +78,7 @@ class ResourceDocument {
 			throw new NullPointerException("attrName cannot be null");
 		}
 		String[] attrParts = attrName.split(NAMESPACE_SEPARATOR);
-		return new AuthorizationNodeValue(new FQname(fqname.getDomain(), attrParts[0]), attrParts[1], value);
+		return new AuthorizationNodeValue(attrParts[0], attrParts[1], value);
 
 	}
 

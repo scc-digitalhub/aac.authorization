@@ -18,13 +18,13 @@ public class SimpleAuthorizationStorageTest {
 		AuthorizationStorage storage = new SimpleAuthorizationStorage(new SimpleAuthorizationSchemaHelper());
 
 		Resource res = new Resource(new FQname("domain", "A"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
 		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		storage.insert(new Authorization(subject, "action", res, entity));
 
 		Resource res1 = new Resource(new FQname("domain", "A"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
 		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 
 		Assert.assertEquals(storage.search(new Authorization(subject, "action", res1, entity1)), true);
@@ -36,7 +36,7 @@ public class SimpleAuthorizationStorageTest {
 		AuthorizationStorage storage = new SimpleAuthorizationStorage(new SimpleAuthorizationSchemaHelper());
 
 		Resource res1 = new Resource(new FQname("domain", "A"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
 		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 
@@ -49,13 +49,13 @@ public class SimpleAuthorizationStorageTest {
 		AuthorizationStorage storage = new SimpleAuthorizationStorage(new SimpleAuthorizationSchemaHelper());
 
 		Resource res = new Resource(new FQname("domain", "A"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
 		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		storage.insert(new Authorization(subject, "action", res, entity));
 
 		Resource res1 = new Resource(new FQname("domain", "B"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "B"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("B", "a", "a_value")));
 		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 
 		Assert.assertEquals(storage.search(new Authorization(subject, "action", res1, entity1)), false);
@@ -67,7 +67,7 @@ public class SimpleAuthorizationStorageTest {
 		AuthorizationStorage storage = new SimpleAuthorizationStorage(new SimpleAuthorizationSchemaHelper());
 
 		Resource res = new Resource(new FQname("domain", "A"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
 		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
@@ -83,7 +83,7 @@ public class SimpleAuthorizationStorageTest {
 		AuthorizationStorage storage = new SimpleAuthorizationStorage(new SimpleAuthorizationSchemaHelper());
 
 		Resource res = new Resource(new FQname("domain", "A"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
 		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
@@ -102,14 +102,14 @@ public class SimpleAuthorizationStorageTest {
 		AuthorizationStorage storage = new SimpleAuthorizationStorage(new SimpleAuthorizationSchemaHelper());
 
 		Resource res = new Resource(new FQname("domain", "A"), Arrays
-				.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", AuthorizationNodeValue.ALL_VALUE)));
+				.asList(new AuthorizationNodeValue("A", "a", AuthorizationNodeValue.ALL_VALUE)));
 		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
 		storage.insert(auth1);
 
 		Resource res1 = new Resource(new FQname("domain", "A"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
 		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 		Authorization authToFind = new Authorization(subject, "action", res1, entity1);
 

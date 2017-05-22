@@ -42,7 +42,7 @@ public class SampleUsage {
 		AuthorizationHelper authHelper = ctx.getBean(AuthorizationHelperImpl.class);
 		ctx.close();
 		Resource res = new Resource(new FQname("domain", "A"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_Value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_Value")));
 		Authorization auth = new Authorization(new AuthorizationUser("sub", "type"), "act", res, new AuthorizationUser("id", "type"));
 
 		try {

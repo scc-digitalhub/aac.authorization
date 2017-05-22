@@ -79,7 +79,7 @@ public class MongoAuthorizationStorage implements AuthorizationStorage {
 				.subtract(childNodeDefinition.getParameters(), definitions);
 		toAssign.stream().forEach(assign -> {
 			childValues.add(
-					new AuthorizationNodeValue(assign.getFQname(), assign.getName(), AuthorizationNodeValue.ALL_VALUE));
+					new AuthorizationNodeValue(assign.getQname(), assign.getName(), AuthorizationNodeValue.ALL_VALUE));
 		});
 		return new Resource(childNodeDefinition.getFqname(), childValues);
 

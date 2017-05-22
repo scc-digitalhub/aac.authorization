@@ -44,7 +44,7 @@ public class MongoAuthorizationStorageTest {
 	@Test
 	public void saveAuthorization() {
 		Resource r = new Resource(new FQname("domain", "A"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
 		AuthorizationUser entity = new AuthorizationUser("id", "type");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Authorization auth = new Authorization(subject, "action", r, entity);
@@ -55,13 +55,13 @@ public class MongoAuthorizationStorageTest {
 	public void insertFirstAuthorization() {
 
 		Resource res = new Resource(new FQname("domain", "A"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
 		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		storage.insert(new Authorization(subject, "action", res, entity));
 
 		Resource res1 = new Resource(new FQname("domain", "A"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
 		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 
 		Assert.assertEquals(true, storage.search(new Authorization(subject, "action", res1, entity1)));
@@ -72,7 +72,7 @@ public class MongoAuthorizationStorageTest {
 	public void searchNotExistentAuthWithEmptyStorage() {
 
 		Resource res1 = new Resource(new FQname("domain", "A"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
 		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Assert.assertEquals(false, storage.search(new Authorization(subject, "action", res1, entity1)));
@@ -83,13 +83,13 @@ public class MongoAuthorizationStorageTest {
 	public void searchNotExistentAuthWithPopulatedStorage() {
 
 		Resource res = new Resource(new FQname("domain", "A"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
 		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		storage.insert(new Authorization(subject, "action", res, entity));
 
 		Resource res1 = new Resource(new FQname("domain", "B"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "B"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("B", "a", "a_value")));
 		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 
 		Assert.assertEquals(false, storage.search(new Authorization(subject, "action", res1, entity1)));
@@ -100,7 +100,7 @@ public class MongoAuthorizationStorageTest {
 	public void removePresentAuth() {
 
 		Resource res = new Resource(new FQname("domain", "A"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
 		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
@@ -115,7 +115,7 @@ public class MongoAuthorizationStorageTest {
 	public void removeNotPresentAuth() {
 
 		Resource res = new Resource(new FQname("domain", "A"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
 		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
@@ -133,14 +133,14 @@ public class MongoAuthorizationStorageTest {
 	public void searchOnWildcardAuthorization() {
 
 		Resource res = new Resource(new FQname("domain", "A"), Arrays
-				.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", AuthorizationNodeValue.ALL_VALUE)));
+				.asList(new AuthorizationNodeValue("A", "a", AuthorizationNodeValue.ALL_VALUE)));
 		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
 		storage.insert(auth1);
 
 		Resource res1 = new Resource(new FQname("domain", "A"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
 		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 		Authorization authToFind = new Authorization(subject, "action", res1, entity1);
 
@@ -151,16 +151,16 @@ public class MongoAuthorizationStorageTest {
 	@Test
 	public void searchForAChildAuthorization() {
 		Resource res = new Resource(new FQname("domain", "A"), Arrays
-				.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", AuthorizationNodeValue.ALL_VALUE)));
+				.asList(new AuthorizationNodeValue("A", "a", AuthorizationNodeValue.ALL_VALUE)));
 		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
 		AuthorizationUser subject = new AuthorizationUser("sub", "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
 		storage.insert(auth1);
 
 		Resource res1 = new Resource(new FQname("domain", "E"),
-				Arrays.asList(new AuthorizationNodeValue(new FQname("domain", "A"), "a", "a_value"),
-						new AuthorizationNodeValue(new FQname("domain", "C"), "c", "c_value"),
-						new AuthorizationNodeValue(new FQname("domain", "E"), "e", "e_value")));
+				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value"),
+						new AuthorizationNodeValue("C", "c", "c_value"),
+						new AuthorizationNodeValue("E", "e", "e_value")));
 		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
 		Authorization authToFind = new Authorization(subject, "action", res1, entity1);
 

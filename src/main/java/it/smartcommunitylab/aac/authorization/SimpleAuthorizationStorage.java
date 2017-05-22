@@ -61,7 +61,7 @@ public class SimpleAuthorizationStorage implements AuthorizationStorage {
 	}
 
 	public AuthorizationNodeValue createNodeValueAll(AuthorizationNodeValue value) {
-		return new AuthorizationNodeValue(value.getDefinition().getFQname(), value.getDefinition().getName(),
+		return new AuthorizationNodeValue(value.getDefinition().getQname(), value.getDefinition().getName(),
 				AuthorizationNodeValue.ALL_VALUE);
 	}
 

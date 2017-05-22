@@ -37,7 +37,7 @@ public class AuthorizationNode {
 
 	public AuthorizationNode(FQname fqname, String parameter) {
 		this(fqname);
-		this.parameters.add(new AuthorizationNodeParam(fqname, parameter));
+		this.parameters.add(new AuthorizationNodeParam(fqname.getQname(), parameter));
 	}
 
 	public AuthorizationNode addChild(AuthorizationNode node) {
@@ -52,7 +52,7 @@ public class AuthorizationNode {
 	}
 
 	public AuthorizationNode addParameter(String param) {
-		parameters.add(new AuthorizationNodeParam(fqname, param));
+		parameters.add(new AuthorizationNodeParam(fqname.getQname(), param));
 		return this;
 	}
 
