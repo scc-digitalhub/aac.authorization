@@ -93,6 +93,7 @@ public class MongoAuthorizationStorage implements AuthorizationStorage {
 	@Override
 	public boolean search(Authorization auth) {
 		AuthorizationGranted authGranted = new MainAuthorizationGranted(auth);
+		authGranted = injectMissingParameters(auth.getResource(), authGranted);
 		Criteria crit = Criteria.where("subject");
 		crit.is(auth.getSubject());
 		crit.and("action").is(authGranted.getAction());
@@ -103,6 +104,24 @@ public class MongoAuthorizationStorage implements AuthorizationStorage {
 		}
 		Query query = new Query(crit);
 		return mongo.exists(query, MainAuthorizationGranted.class);
+	}
+
+	private AuthorizationGranted injectMissingParameters(Resource resource, AuthorizationGranted authGranted) {
+		AuthorizationNode node = authSchema.getNode(resource.getFqnameRef());
+
+		List<AuthorizationNodeParam> usedParams = resource.getValues().stream().map(value -> value.getDefinition())
+				.collect(Collectors.toList());
+
+		List<AuthorizationNodeParam> missingParams = node.getParameters().stream()
+				.filter(param -> !usedParams.contains(param)).collect(Collectors.toList());
+
+		missingParams.stream().forEach(missing -> {
+			authGranted.getResource().addAttribute(missing.getQname(), missing.getName(),
+					AuthorizationNodeValue.ALL_VALUE);
+		});
+
+		return authGranted;
+
 	}
 
 	@Override
