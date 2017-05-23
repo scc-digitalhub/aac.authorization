@@ -45,13 +45,13 @@ class ResourceDocument {
 		String getValue();
 	}
 
-	public void addAttribute(String name, String value) {
-		attributes.put(name, value);
+	public void addAttribute(String qname, String name, String value) {
+		attributes.put(getAttrName(qname, name), value);
 	}
 
 	public void addAllAttributes(Collection<AuthorizationNodeValue> attributes) {
 		for (AuthorizationNodeValue attr : attributes) {
-			addAttribute(getAttrName(attr.getDefinition().getQname(), attr.getDefinition().getName()),
+			addAttribute(attr.getDefinition().getQname(), attr.getDefinition().getName(),
 					attr.getValue());
 		}
 	}
