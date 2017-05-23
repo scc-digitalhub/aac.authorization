@@ -140,27 +140,23 @@ public class RealisticScenario {
 
 	}
 
-	// This scenario needs a strong refactor..moved to another dev branch
 
-	// @Test
-	// public void incompleteResource() throws NotValidResourceException {
-	// AuthorizationUser subject = new AuthorizationUser("my-id", "user");
-	// AuthorizationUser entity = new AuthorizationUser("my-id", "user");
-	// Resource resStudent1 = new Resource(new FQname(DOMAIN, "student"),
-	// Arrays.asList(new AuthorizationNodeValue("student", "student",
-	// "my-id")));
-	// Authorization authorization = new Authorization(subject, "action",
-	// resStudent1, entity);
-	// authHelper.insert(authorization);
-	//
-	// Resource resStudent3 = new Resource(new FQname(DOMAIN, "data"),
-	// Arrays.asList(new AuthorizationNodeValue("data", "data", "Experience")));
-	// Authorization authorization2 = new Authorization(subject, "action",
-	// resStudent3, entity);
-	//
-	// Assert.assertFalse(authHelper.validate(authorization2));
-	//
-	// }
+	@Test
+	public void incompleteResource() throws NotValidResourceException {
+		AuthorizationUser subject = new AuthorizationUser("my-id", "user");
+		AuthorizationUser entity = new AuthorizationUser("my-id", "user");
+		Resource resStudent1 = new Resource(new FQname(DOMAIN, "student"),
+				Arrays.asList(new AuthorizationNodeValue("student", "student", "my-id")));
+		Authorization authorization = new Authorization(subject, "action", resStudent1, entity);
+		authHelper.insert(authorization);
+
+		Resource resStudent3 = new Resource(new FQname(DOMAIN, "data"),
+				Arrays.asList(new AuthorizationNodeValue("data", "data", "Experience")));
+		Authorization authorization2 = new Authorization(subject, "action", resStudent3, entity);
+
+		Assert.assertFalse(authHelper.validate(authorization2));
+
+	}
 }
 
 
