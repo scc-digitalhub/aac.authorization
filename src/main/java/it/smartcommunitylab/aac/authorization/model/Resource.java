@@ -17,6 +17,15 @@ public class Resource {
 		this.values = new ArrayList<>(values);
 	}
 
+	public Resource(FQname fqnameRef) {
+		this.fqnameRef = fqnameRef;
+		this.values = new ArrayList<>();
+	}
+
+	public void addNodeValue(AuthorizationNodeValue value) {
+		values.add(value);
+	}
+
 	public boolean isInstanceOf(AuthorizationNode node) {
 		return fqnameRef.equals(node.getFqname()) && checkLogicalEquivalence(node.getParameters(), values);
 	}
