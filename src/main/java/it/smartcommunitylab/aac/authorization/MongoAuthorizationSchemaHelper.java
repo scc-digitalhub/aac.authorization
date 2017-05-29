@@ -8,6 +8,9 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -19,6 +22,8 @@ import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExist;
 import it.smartcommunitylab.aac.authorization.model.FQname;
 import it.smartcommunitylab.aac.authorization.model.Resource;
+import it.smartcommunitylab.aac.authorization.parser.JsonSchemaParser;
+import it.smartcommunitylab.aac.authorization.parser.ParseResult;
 
 public class MongoAuthorizationSchemaHelper implements AuthorizationSchemaHelper {
 
@@ -26,6 +31,8 @@ public class MongoAuthorizationSchemaHelper implements AuthorizationSchemaHelper
 	private MongoTemplate mongo;
 
 	protected AuthorizationNode root;
+
+	private static final Logger logger = LoggerFactory.getLogger(MongoAuthorizationSchemaHelper.class);
 
 	@PostConstruct
 	private void init() {
@@ -126,4 +133,38 @@ public class MongoAuthorizationSchemaHelper implements AuthorizationSchemaHelper
 		return allChildren;
 	}
 
+	@Override
+	public void loadJson(String jsonString) {
+		JsonSchemaParser parser = new JsonSchemaParser();
+		ParseResult result = parser.parse(jsonString);
+		result.getJsonSchemaNodes().stream().filter(jsonNode -> CollectionUtils.isEmpty(jsonNode.getParents()))
+				.forEach(jsonNode -> {
+					AuthorizationNode authNode = new AuthorizationNode(
+							new FQname(result.getDomain(), jsonNode.getQname()));
+					jsonNode.getParams().stream().forEach(param -> authNode.addParameter(param));
+					try {
+						addRootChild(authNode);
+					} catch (AuthorizationNodeAlreadyExist e) {
+						logger.error("AuthorizationNode already exist: {}", authNode);
+					}
+		});
+
+		result.getJsonSchemaNodes().stream().filter(jsonNode -> !CollectionUtils.isEmpty(jsonNode.getParents()))
+				.forEach(jsonNode -> {
+					AuthorizationNode authNode = new AuthorizationNode(
+							new FQname(result.getDomain(), jsonNode.getQname()));
+					jsonNode.getParams().stream().forEach(param -> authNode.addParameter(param));
+						jsonNode.getParents().stream()
+								.forEach(
+										parentQname -> {
+											try {
+												addChild(new FQname(result.getDomain(), parentQname), authNode);
+											} catch (AuthorizationNodeAlreadyExist e) {
+												logger.error("AuthorizationNode already exist: {}", authNode);
+											}
+										});
+
+
+				});
+	}
 }

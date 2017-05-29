@@ -1,5 +1,8 @@
 package it.smartcommunitylab.aac.authorization;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +20,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
+
+import com.google.common.io.CharStreams;
 
 import it.smartcommunitylab.aac.authorization.config.MongoConfig;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
@@ -117,6 +122,15 @@ public class MongoAuthorizationSchemaHelperTest {
 
 		Set<AuthorizationNode> children = authSchema.getAllChildren(nodeB);
 		Assert.assertEquals(3, children.size());
+	}
+
+	@Test
+	public void importSchema() throws UnsupportedEncodingException, IOException {
+		String jsonContent = CharStreams.toString(new InputStreamReader(
+				Thread.currentThread().getContextClassLoader().getResourceAsStream("loadSchema1.json"), "UTF-8"));
+		authSchema.loadJson(jsonContent);
+		Assert.assertNotNull(authSchema.getNode(new FQname("cartella-studente", "data")));
+
 	}
 
 }

@@ -46,4 +46,6 @@ public interface AuthorizationSchemaHelper {
 
 	AuthorizationNode getNode(FQname qname);
 
+	void loadJson(String jsonString);
+
 }

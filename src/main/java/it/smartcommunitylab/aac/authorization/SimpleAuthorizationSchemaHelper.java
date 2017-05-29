@@ -113,4 +113,10 @@ public class SimpleAuthorizationSchemaHelper implements AuthorizationSchemaHelpe
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void loadJson(String jsonString) {
+		// TODO Auto-generated method stub
+
+	}
 }

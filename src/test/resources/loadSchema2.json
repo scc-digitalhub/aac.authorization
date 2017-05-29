@@ -1,0 +1,61 @@
+    {
+      "name": "cartella-studente",
+      "nodes": [
+        {
+          "qname": "student",
+          "params": [
+            "studentId"
+          ],
+          "childrenQnames": [
+            "data"
+          ]
+        },
+        {
+          "params": [
+            "instituteId"
+          ],
+          "childrenQnames": [
+            "data-institute"
+          ]
+        },
+        {
+          "qname": "certifier",
+          "params": [
+            "certifierId"
+          ],
+          "childrenQnames": [
+            "data-certifier",
+            "student-certifier"
+          ]
+        },
+        {
+          "qname": "data",
+          "params": [
+            "data"
+          ],
+          "childrenQnames": [
+            "data-detail"
+          ]
+        },
+        {
+          "qname": "data-institute",
+          "params": [
+            "data"
+          ]
+        },
+        {
+          "qname": "data-certifier",
+          "params": [
+            "data",
+            "studentId"
+          ]
+        },
+        {
+          "qname": "data-detail",
+          "params": [
+            "type",
+            "id"
+          ]
+        }
+      ]
+    }
