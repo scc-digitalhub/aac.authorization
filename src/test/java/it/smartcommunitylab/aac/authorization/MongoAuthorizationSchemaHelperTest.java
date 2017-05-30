@@ -125,7 +125,7 @@ public class MongoAuthorizationSchemaHelperTest {
 	}
 
 	@Test
-	public void importSchema() throws UnsupportedEncodingException, IOException {
+	public void importSchema() throws UnsupportedEncodingException, IOException, AuthorizationNodeAlreadyExist {
 		String jsonContent = CharStreams.toString(new InputStreamReader(
 				Thread.currentThread().getContextClassLoader().getResourceAsStream("loadSchema1.json"), "UTF-8"));
 		authSchema.loadJson(jsonContent);

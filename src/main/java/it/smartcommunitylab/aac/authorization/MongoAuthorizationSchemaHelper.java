@@ -22,6 +22,7 @@ import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExist;
 import it.smartcommunitylab.aac.authorization.model.FQname;
 import it.smartcommunitylab.aac.authorization.model.Resource;
+import it.smartcommunitylab.aac.authorization.parser.JsonSchemaNode;
 import it.smartcommunitylab.aac.authorization.parser.JsonSchemaParser;
 import it.smartcommunitylab.aac.authorization.parser.ParseResult;
 
@@ -134,37 +135,21 @@ public class MongoAuthorizationSchemaHelper implements AuthorizationSchemaHelper
 	}
 
 	@Override
-	public void loadJson(String jsonString) {
+	public void loadJson(String jsonString) throws AuthorizationNodeAlreadyExist {
 		JsonSchemaParser parser = new JsonSchemaParser();
 		ParseResult result = parser.parse(jsonString);
-		result.getJsonSchemaNodes().stream().filter(jsonNode -> CollectionUtils.isEmpty(jsonNode.getParents()))
-				.forEach(jsonNode -> {
-					AuthorizationNode authNode = new AuthorizationNode(
-							new FQname(result.getDomain(), jsonNode.getQname()));
-					jsonNode.getParams().stream().forEach(param -> authNode.addParameter(param));
-					try {
-						addRootChild(authNode);
-					} catch (AuthorizationNodeAlreadyExist e) {
-						logger.error("AuthorizationNode already exist: {}", authNode);
-					}
-		});
-
-		result.getJsonSchemaNodes().stream().filter(jsonNode -> !CollectionUtils.isEmpty(jsonNode.getParents()))
-				.forEach(jsonNode -> {
-					AuthorizationNode authNode = new AuthorizationNode(
-							new FQname(result.getDomain(), jsonNode.getQname()));
-					jsonNode.getParams().stream().forEach(param -> authNode.addParameter(param));
-						jsonNode.getParents().stream()
-								.forEach(
-										parentQname -> {
-											try {
-												addChild(new FQname(result.getDomain(), parentQname), authNode);
-											} catch (AuthorizationNodeAlreadyExist e) {
-												logger.error("AuthorizationNode already exist: {}", authNode);
-											}
-										});
-
-
-				});
+		for (JsonSchemaNode jsonNode : result.getJsonSchemaNodes()) {
+			if (CollectionUtils.isEmpty(jsonNode.getParents())) {
+				AuthorizationNode authNode = new AuthorizationNode(new FQname(result.getDomain(), jsonNode.getQname()));
+				jsonNode.getParams().stream().forEach(param -> authNode.addParameter(param));
+				addRootChild(authNode);
+			} else {
+				AuthorizationNode authNode = new AuthorizationNode(new FQname(result.getDomain(), jsonNode.getQname()));
+				jsonNode.getParams().stream().forEach(param -> authNode.addParameter(param));
+				for (String parentQname : jsonNode.getParents()) {
+					addChild(new FQname(result.getDomain(), parentQname), authNode);
+				}
+			}
+		}
 	}
 }
