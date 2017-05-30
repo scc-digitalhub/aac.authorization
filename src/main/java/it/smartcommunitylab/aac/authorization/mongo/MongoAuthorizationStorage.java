@@ -94,8 +94,7 @@ public class MongoAuthorizationStorage implements AuthorizationStorage {
 	public boolean search(Authorization auth) {
 		AuthorizationGranted authGranted = new MainAuthorizationGranted(auth);
 		authGranted = injectMissingParameters(auth.getResource(), authGranted);
-		Criteria crit = Criteria.where("subject");
-		crit.is(auth.getSubject());
+		Criteria crit = new Criteria();
 		crit.and("action").is(authGranted.getAction());
 		crit.and("entity").is(authGranted.getEntity());
 		crit.and("resource.fqname").is(authGranted.getResource().getFqname());
