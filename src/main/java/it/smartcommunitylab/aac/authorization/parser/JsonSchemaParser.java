@@ -7,14 +7,18 @@ import java.util.List;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 
 public class JsonSchemaParser {
 	private String domainReference;
+
+	private static final Logger logger = LoggerFactory.getLogger(JsonSchemaParser.class);
 
 	public interface Domain {
 		public String getName();
@@ -132,11 +136,10 @@ public class JsonSchemaParser {
 				jsonNode.setParents(new ArrayList<>(parentsNodes.get(jsonNode.getQname())));
 			});
 			result.setJsonSchemaNodes(jsonNodes);
-		} catch (MismatchedInputException e) {
+		} catch (JsonMappingException e) {
 			throw new IllegalArgumentException("qname field is required");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("IOException", e);
 		}
 
 		return result;
