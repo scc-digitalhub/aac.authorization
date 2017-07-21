@@ -6,16 +6,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class AuthorizationUser {
-	private String id;
+	private AccountAttribute accountAttribute;
 	private String type;
 
-	public AuthorizationUser(String id, String type) {
-		this.id = id;
+	public AuthorizationUser(AccountAttribute accountAttribute, String type) {
+		this.accountAttribute = accountAttribute;
 		this.type = type;
 	}
 
-	public String getId() {
-		return id;
+	public AccountAttribute getAccountAttribute() {
+		return accountAttribute;
 	}
 
 	public String getType() {
@@ -34,17 +34,18 @@ public class AuthorizationUser {
 			return false;
 		}
 		AuthorizationUser rhs = (AuthorizationUser) obj;
-		return new EqualsBuilder().append(id, rhs.id).append(type, rhs.type).isEquals();
+		return new EqualsBuilder().append(accountAttribute, rhs.accountAttribute).append(type, rhs.type).isEquals();
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(5, 3).append(id).append(type).hashCode();
+		return new HashCodeBuilder(5, 3).append(accountAttribute).append(type).hashCode();
 	}
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id).append("type", type)
+		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("accountAttribute", accountAttribute)
+				.append("type", type)
 				.build();
 	}
 

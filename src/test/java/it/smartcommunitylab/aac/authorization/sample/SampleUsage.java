@@ -12,6 +12,7 @@ import it.smartcommunitylab.aac.authorization.AuthorizationSchemaHelper;
 import it.smartcommunitylab.aac.authorization.NotValidResourceException;
 import it.smartcommunitylab.aac.authorization.config.Config;
 import it.smartcommunitylab.aac.authorization.config.MongoConfig;
+import it.smartcommunitylab.aac.authorization.model.AccountAttribute;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExist;
@@ -43,7 +44,9 @@ public class SampleUsage {
 		ctx.close();
 		Resource res = new Resource(new FQname("domain", "A"),
 				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_Value")));
-		Authorization auth = new Authorization(new AuthorizationUser("sub", "type"), "act", res, new AuthorizationUser("id", "type"));
+		Authorization auth = new Authorization(
+				new AuthorizationUser(new AccountAttribute("account", "name", "sub"), "type"), "act", res,
+				new AuthorizationUser(new AccountAttribute("account", "name", "id"), "type"));
 
 		try {
 			authHelper.insert(auth);

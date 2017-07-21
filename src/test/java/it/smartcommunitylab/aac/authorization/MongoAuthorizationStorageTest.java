@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import it.smartcommunitylab.aac.authorization.config.MongoConfig;
+import it.smartcommunitylab.aac.authorization.model.AccountAttribute;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExist;
@@ -45,8 +46,8 @@ public class MongoAuthorizationStorageTest {
 	public void saveAuthorization() {
 		Resource r = new Resource(new FQname("domain", "A"),
 				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
-		AuthorizationUser entity = new AuthorizationUser("id", "type");
-		AuthorizationUser subject = new AuthorizationUser("sub", "type");
+		AuthorizationUser entity = new AuthorizationUser(new AccountAttribute("account", "name", "id"), "type");
+		AuthorizationUser subject = new AuthorizationUser(new AccountAttribute("account", "name", "sub"), "type");
 		Authorization auth = new Authorization(subject, "action", r, entity);
 		storage.insert(auth);
 	}
@@ -56,13 +57,13 @@ public class MongoAuthorizationStorageTest {
 
 		Resource res = new Resource(new FQname("domain", "A"),
 				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
-		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
-		AuthorizationUser subject = new AuthorizationUser("sub", "type");
+		AuthorizationUser entity = new AuthorizationUser(new AccountAttribute("account", "name", "e1"), "type1");
+		AuthorizationUser subject = new AuthorizationUser(new AccountAttribute("account", "name", "sub"), "type");
 		storage.insert(new Authorization(subject, "action", res, entity));
 
 		Resource res1 = new Resource(new FQname("domain", "A"),
 				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
-		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
+		AuthorizationUser entity1 = new AuthorizationUser(new AccountAttribute("account", "name", "e1"), "type1");
 
 		Assert.assertEquals(true, storage.search(new Authorization(subject, "action", res1, entity1)));
 
@@ -73,8 +74,8 @@ public class MongoAuthorizationStorageTest {
 
 		Resource res1 = new Resource(new FQname("domain", "A"),
 				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
-		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
-		AuthorizationUser subject = new AuthorizationUser("sub", "type");
+		AuthorizationUser entity1 = new AuthorizationUser(new AccountAttribute("account", "name", "e1"), "type1");
+		AuthorizationUser subject = new AuthorizationUser(new AccountAttribute("account", "name", "sub"), "type");
 		Assert.assertEquals(false, storage.search(new Authorization(subject, "action", res1, entity1)));
 
 	}
@@ -84,13 +85,13 @@ public class MongoAuthorizationStorageTest {
 
 		Resource res = new Resource(new FQname("domain", "A"),
 				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
-		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
-		AuthorizationUser subject = new AuthorizationUser("sub", "type");
+		AuthorizationUser entity = new AuthorizationUser(new AccountAttribute("account", "name", "e1"), "type1");
+		AuthorizationUser subject = new AuthorizationUser(new AccountAttribute("account", "name", "sub"), "type");
 		storage.insert(new Authorization(subject, "action", res, entity));
 
 		Resource res1 = new Resource(new FQname("domain", "B"),
 				Arrays.asList(new AuthorizationNodeValue("B", "a", "a_value")));
-		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
+		AuthorizationUser entity1 = new AuthorizationUser(new AccountAttribute("account", "name", "e1"), "type1");
 
 		Assert.assertEquals(false, storage.search(new Authorization(subject, "action", res1, entity1)));
 
@@ -101,8 +102,8 @@ public class MongoAuthorizationStorageTest {
 
 		Resource res = new Resource(new FQname("domain", "A"),
 				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
-		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
-		AuthorizationUser subject = new AuthorizationUser("sub", "type");
+		AuthorizationUser entity = new AuthorizationUser(new AccountAttribute("account", "name", "e1"), "type1");
+		AuthorizationUser subject = new AuthorizationUser(new AccountAttribute("account", "name", "sub"), "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
 		auth1 = storage.insert(auth1);
 
@@ -116,13 +117,14 @@ public class MongoAuthorizationStorageTest {
 
 		Resource res = new Resource(new FQname("domain", "A"),
 				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
-		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
-		AuthorizationUser subject = new AuthorizationUser("sub", "type");
+		AuthorizationUser entity = new AuthorizationUser(new AccountAttribute("account", "name", "e1"), "type1");
+		AuthorizationUser subject = new AuthorizationUser(new AccountAttribute("account", "name", "sub"), "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
 		storage.insert(auth1);
 
-		Authorization dummy = new Authorization(new AuthorizationUser("dummy", "dummy"), "action", null,
-				new AuthorizationUser("id2", "type"));
+		Authorization dummy = new Authorization(
+				new AuthorizationUser(new AccountAttribute("account", "name", "dummy"), "dummy"), "action", null,
+				new AuthorizationUser(new AccountAttribute("account", "name", "id2"), "type"));
 
 		Assert.assertTrue(storage.search(auth1));
 		storage.remove(dummy);
@@ -134,14 +136,14 @@ public class MongoAuthorizationStorageTest {
 
 		Resource res = new Resource(new FQname("domain", "A"), Arrays
 				.asList(new AuthorizationNodeValue("A", "a", AuthorizationNodeValue.ALL_VALUE)));
-		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
-		AuthorizationUser subject = new AuthorizationUser("sub", "type");
+		AuthorizationUser entity = new AuthorizationUser(new AccountAttribute("account", "name", "e1"), "type1");
+		AuthorizationUser subject = new AuthorizationUser(new AccountAttribute("account", "name", "sub"), "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
 		storage.insert(auth1);
 
 		Resource res1 = new Resource(new FQname("domain", "A"),
 				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value")));
-		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
+		AuthorizationUser entity1 = new AuthorizationUser(new AccountAttribute("account", "name", "e1"), "type1");
 		Authorization authToFind = new Authorization(subject, "action", res1, entity1);
 
 		Assert.assertTrue(storage.search(authToFind));
@@ -152,8 +154,8 @@ public class MongoAuthorizationStorageTest {
 	public void searchForAChildAuthorization() {
 		Resource res = new Resource(new FQname("domain", "A"), Arrays
 				.asList(new AuthorizationNodeValue("A", "a", AuthorizationNodeValue.ALL_VALUE)));
-		AuthorizationUser entity = new AuthorizationUser("e1", "type1");
-		AuthorizationUser subject = new AuthorizationUser("sub", "type");
+		AuthorizationUser entity = new AuthorizationUser(new AccountAttribute("account", "name", "e1"), "type1");
+		AuthorizationUser subject = new AuthorizationUser(new AccountAttribute("account", "name", "sub"), "type");
 		Authorization auth1 = new Authorization(subject, "action", res, entity);
 		storage.insert(auth1);
 
@@ -161,7 +163,7 @@ public class MongoAuthorizationStorageTest {
 				Arrays.asList(new AuthorizationNodeValue("A", "a", "a_value"),
 						new AuthorizationNodeValue("C", "c", "c_value"),
 						new AuthorizationNodeValue("E", "e", "e_value")));
-		AuthorizationUser entity1 = new AuthorizationUser("e1", "type1");
+		AuthorizationUser entity1 = new AuthorizationUser(new AccountAttribute("account", "name", "e1"), "type1");
 		Authorization authToFind = new Authorization(subject, "action", res1, entity1);
 
 		Assert.assertTrue(storage.search(authToFind));
