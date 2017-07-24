@@ -1,6 +1,10 @@
 package it.smartcommunitylab.aac.authorization;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -16,6 +20,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+import com.mongodb.BasicDBObject;
+
 import it.smartcommunitylab.aac.authorization.config.MongoConfig;
 import it.smartcommunitylab.aac.authorization.model.AccountAttribute;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
@@ -24,6 +32,7 @@ import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExis
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeValue;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
 import it.smartcommunitylab.aac.authorization.model.FQname;
+import it.smartcommunitylab.aac.authorization.model.RequestedAuthorization;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 import it.smartcommunitylab.aac.authorization.mongo.MongoAuthorizationStorage;
 
@@ -103,27 +112,29 @@ public class RealisticScenario {
 		Authorization authorization = new Authorization(subject, "action", resStudent1, entity);
 		authHelper.insert(authorization);
 
+		RequestedAuthorization authorization2 = new RequestedAuthorization("action", resStudent1, entity);
+
 		Resource resStudent2 = new Resource(new FQname(DOMAIN, "student"));
 		resStudent2.addNodeValue(new AuthorizationNodeValue("student", "studentId", "he-man-id"));
-		Authorization authorization1 = new Authorization(subject, "action", resStudent2, entity);
+		RequestedAuthorization authorization1 = new RequestedAuthorization("action", resStudent2, entity);
 
 		Assert.assertFalse(authHelper.validate(authorization1));
 
-		Assert.assertTrue(authHelper.validate(authorization));
+		Assert.assertTrue(authHelper.validate(authorization2));
 
 		// try validate a second level authorization
 
 		Resource resStudent3 = new Resource(new FQname(DOMAIN, "data"));
 		resStudent3.addNodeValue(new AuthorizationNodeValue("student", "studentId", "my-id"));
 		resStudent3.addNodeValue(new AuthorizationNodeValue("data", "data", "Experience"));
-		Authorization authorization2 = new Authorization(subject, "action", resStudent3, entity);
+		authorization2 = new RequestedAuthorization("action", resStudent3, entity);
 
 		Assert.assertTrue(authHelper.validate(authorization2));
 
 		Resource resStudent4 = new Resource(new FQname(DOMAIN, "data"));
 		resStudent4.addNodeValue(new AuthorizationNodeValue("student", "studentId", "he-man-id"));
 		resStudent4.addNodeValue(new AuthorizationNodeValue("data", "data", "Experience"));
-		Authorization authorization3 = new Authorization(subject, "action", resStudent4, entity);
+		RequestedAuthorization authorization3 = new RequestedAuthorization("action", resStudent4, entity);
 
 		Assert.assertFalse(authHelper.validate(authorization3));
 	}
@@ -138,12 +149,15 @@ public class RealisticScenario {
 		Authorization authorization = new Authorization(subject, "action", resStudent1, entity);
 		authHelper.insert(authorization);
 
+		RequestedAuthorization authorization2 = new RequestedAuthorization("action", resStudent1, entity);
+
 		Resource resStudent2 = new Resource(new FQname(DOMAIN, "student"));
 		resStudent2.addNodeValue(new AuthorizationNodeValue("student", "studentId", "he-man"));
-		Authorization authorization1 = new Authorization(subject, "action", resStudent2, entity);
+		RequestedAuthorization authorization1 = new RequestedAuthorization("action", resStudent2, entity);
+
 
 		Assert.assertFalse(authHelper.validate(authorization1));
-		Assert.assertTrue(authHelper.validate(authorization));
+		Assert.assertTrue(authHelper.validate(authorization2));
 
 	}
 
@@ -164,18 +178,18 @@ public class RealisticScenario {
 		resStudent2.addNodeValue(new AuthorizationNodeValue("student", "studentId", "my-id"));
 		resStudent2.addNodeValue(new AuthorizationNodeValue("data-detail", "type", "expType"));
 		resStudent2.addNodeValue(new AuthorizationNodeValue("data-detail", "id", "expId"));
-		Authorization authorization1 = new Authorization(subject1, "action", resStudent2, entity1);
+		RequestedAuthorization authorization1 = new RequestedAuthorization("action", resStudent2, entity1);
 		Assert.assertTrue(authHelper.validate(authorization1));
 
 		Resource resStudent3 = new Resource(new FQname(DOMAIN, "data"));
 		resStudent3.addNodeValue(new AuthorizationNodeValue("data", "data", "Registration"));
 		resStudent3.addNodeValue(new AuthorizationNodeValue("student", "studentId", "my-id"));
-		Authorization authorization2 = new Authorization(subject, "action", resStudent3, entity);
+		RequestedAuthorization authorization2 = new RequestedAuthorization("action", resStudent3, entity);
 		Assert.assertFalse(authHelper.validate(authorization2));
 
 		Resource resStudent4 = new Resource(new FQname(DOMAIN, "data"));
 		resStudent3.addNodeValue(new AuthorizationNodeValue("student", "studentId", "my-id"));
-		Authorization authorization3 = new Authorization(subject, "action", resStudent4, entity);
+		RequestedAuthorization authorization3 = new RequestedAuthorization("action", resStudent4, entity);
 		Assert.assertFalse(authHelper.validate(authorization3));
 	}
 
@@ -191,7 +205,7 @@ public class RealisticScenario {
 
 		Resource resStudent3 = new Resource(new FQname(DOMAIN, "data"));
 		resStudent3.addNodeValue(new AuthorizationNodeValue("data", "data", "Experience"));
-		Authorization authorization2 = new Authorization(subject, "action", resStudent3, entity);
+		RequestedAuthorization authorization2 = new RequestedAuthorization("action", resStudent3, entity);
 
 		Assert.assertFalse(authHelper.validate(authorization2));
 	}
@@ -207,7 +221,7 @@ public class RealisticScenario {
 
 		Resource resStudent2 = new Resource(new FQname(DOMAIN, "student"),
 				Arrays.asList(new AuthorizationNodeValue("student", "studentId", "eddie-brock")));
-		Authorization authorization1 = new Authorization(subject, "action", resStudent2, entity);
+		RequestedAuthorization authorization1 = new RequestedAuthorization("action", resStudent2, entity);
 		Assert.assertTrue(authHelper.validate(authorization1));
 	}
 
@@ -223,10 +237,54 @@ public class RealisticScenario {
 		AuthorizationUser entity1 = new AuthorizationUser(new AccountAttribute("google+", "surname", "my-id"), "user");
 		Resource resStudent2 = new Resource(new FQname(DOMAIN, "student"),
 				Arrays.asList(new AuthorizationNodeValue("student", "studentId", "eddie-brock")));
-		Authorization authorization1 = new Authorization(subject, "action", resStudent2, entity1);
+		RequestedAuthorization authorization1 = new RequestedAuthorization("action", resStudent2, entity1);
 		Assert.assertFalse(authHelper.validate(authorization1));
 	}
 
+	/*
+	 * This test proves compatibility with authorization persistence model v0.1.0 (action as String either than array of String)
+	 */
+	@Test
+	public void compatibilityWithOldVersion() {
+		setupCompatibilityTest();
+		AuthorizationUser entity1 = new AuthorizationUser(new AccountAttribute("account", "name", "my-id"), "user");
+		Resource resStudent2 = new Resource(new FQname(DOMAIN, "data-detail"),
+				Arrays.asList(new AuthorizationNodeValue("data", "data", "Experience"),
+						new AuthorizationNodeValue("student", "studentId", "my-id")));
+		RequestedAuthorization authorization1 = new RequestedAuthorization("action", resStudent2, entity1);
+		Assert.assertTrue(authHelper.validate(authorization1));
+	}
+
+	@Test
+	public void multipleActionAuthorization() throws NotValidResourceException {
+		AuthorizationUser subject = new AuthorizationUser(new AccountAttribute("account", "name", "my-id"), "user");
+		AuthorizationUser entity = new AuthorizationUser(new AccountAttribute("account", "surname", "my-id"), "user");
+		Resource resStudent1 = new Resource(new FQname(DOMAIN, "student"),
+				Arrays.asList(new AuthorizationNodeValue("student", "studentId", AuthorizationNodeValue.ALL_VALUE)));
+		Authorization authorization = new Authorization(subject, Arrays.asList("action", "action1"), resStudent1,
+				entity);
+		authHelper.insert(authorization);
+
+		AuthorizationUser entity1 = new AuthorizationUser(new AccountAttribute("google+", "surname", "my-id"), "user");
+		Resource resStudent2 = new Resource(new FQname(DOMAIN, "student"),
+				Arrays.asList(new AuthorizationNodeValue("student", "studentId", "eddie-brock")));
+		RequestedAuthorization authorization1 = new RequestedAuthorization("action1", resStudent2, entity1);
+		Assert.assertFalse(authHelper.validate(authorization1));
+	}
+
+	private Map<String, Object> jsonToMap(InputStream in) {
+		Gson gson = new Gson();
+		return gson.fromJson(new JsonReader(new InputStreamReader(in)), new LinkedHashMap<String, Object>().getClass());
+	}
+
+	private void setupCompatibilityTest() {
+		BasicDBObject auth = new BasicDBObject(jsonToMap(Thread.currentThread().getContextClassLoader()
+				.getResourceAsStream("authorizationSamples/compatibility.json")));
+
+		mongo.getCollection("authorizationGranted").insert(auth);
+		
+		
+	}
 }
 
 

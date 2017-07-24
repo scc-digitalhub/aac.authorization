@@ -3,6 +3,7 @@ package it.smartcommunitylab.aac.authorization;
 import org.springframework.stereotype.Service;
 
 import it.smartcommunitylab.aac.authorization.model.Authorization;
+import it.smartcommunitylab.aac.authorization.model.RequestedAuthorization;
 
 @Service
 public interface AuthorizationHelper {
@@ -13,6 +14,6 @@ public interface AuthorizationHelper {
 
 	void remove(String authorizationId);
 
-	boolean validate(Authorization auth);
+	boolean validate(RequestedAuthorization auth);
 
 }

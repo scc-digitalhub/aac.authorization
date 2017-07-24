@@ -1,0 +1,35 @@
+{
+"_id" : ObjectId("5975b4e760b2363fc8876a75"),
+	    "_class" : "mainAuthGranted",
+	    "subject" : {
+	        "accountAttribute" : {
+	            "accountName" : "account",
+	            "attributeName" : "name",
+	            "attributeValue" : "my-id"
+	        },
+	        "type" : "user"
+	    },
+	    "action" : "action",
+	    "entity" : {
+	        "accountAttribute" : {
+	            "accountName" : "account",
+	            "attributeName" : "name",
+	            "attributeValue" : "my-id"
+	        },
+	        "type" : "user"
+	    },
+	    "resource" : {
+	        "fqname" : {
+	            "domain" : "cartella",
+	            "qname" : "data-detail"
+	        },
+	        "attrs" : {
+	            "data#data" : "Experience",
+	            "student#studentId" : "my-id",
+	            "data-detail#id" : "*",
+	            "data-detail#type" : "*"
+	        }
+
+	}
+
+}

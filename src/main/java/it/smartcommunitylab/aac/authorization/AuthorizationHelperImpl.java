@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import it.smartcommunitylab.aac.authorization.model.Authorization;
+import it.smartcommunitylab.aac.authorization.model.RequestedAuthorization;
 
 public class AuthorizationHelperImpl implements AuthorizationHelper {
 
@@ -38,8 +39,8 @@ public class AuthorizationHelperImpl implements AuthorizationHelper {
 	}
 
 	@Override
-	public boolean validate(Authorization auth) {
-		boolean isAuthGranted = storage.search(auth);
+	public boolean validate(RequestedAuthorization auth) {
+		boolean isAuthGranted = storage.search(new Authorization(auth));
 		if (isAuthGranted) {
 			logger.info("authorization is granted: {}", auth);
 		} else {

@@ -41,7 +41,7 @@ public class SimpleAuthorizationStorage implements AuthorizationStorage {
 			return true;
 		} else { // check if there is a WILDCARD
 			for (Resource dep : createDependentResources(auth.getResource())) {
-				Authorization depAuth = new Authorization(auth.getSubject(), auth.getAction(), dep, auth.getEntity());
+				Authorization depAuth = new Authorization(auth.getSubject(), auth.getActions(), dep, auth.getEntity());
 				checked = storage.containsKey(depAuth);
 				if (checked) {
 					break;

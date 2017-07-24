@@ -65,7 +65,7 @@ public class MongoAuthorizationStorage implements AuthorizationStorage {
 	}
 
 	private Authorization generateChildAuthorization(AuthorizationNode childNodeDefinition, Authorization parentAuthorization) {
-		return new Authorization(parentAuthorization.getSubject(), parentAuthorization.getAction(),
+		return new Authorization(parentAuthorization.getSubject(), parentAuthorization.getActions(),
 				generateChildResource(childNodeDefinition, parentAuthorization.getResource()),
 				parentAuthorization.getEntity());
 	}
@@ -95,7 +95,7 @@ public class MongoAuthorizationStorage implements AuthorizationStorage {
 		AuthorizationGranted authGranted = new MainAuthorizationGranted(auth);
 		authGranted = injectMissingParameters(auth.getResource(), authGranted);
 		Criteria crit = new Criteria();
-		crit.and("action").is(authGranted.getAction());
+		crit.and("action").is(CollectionUtils.isEmpty(authGranted.getActions()) ? "" : authGranted.getActions().get(0));
 		crit.and("entity").is(authGranted.getEntity());
 		crit.and("resource.fqname").is(authGranted.getResource().getFqname());
 		for (AttributeDocument attr : authGranted.getResource().getAttributes()) {

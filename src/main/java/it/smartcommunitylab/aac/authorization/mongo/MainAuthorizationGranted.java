@@ -19,9 +19,10 @@ class MainAuthorizationGranted extends AuthorizationGranted {
 	}
 
 	@PersistenceConstructor
-	private MainAuthorizationGranted(String id, AuthorizationUser subject, String action, AuthorizationUser entity, ResourceDocument resource,
+	private MainAuthorizationGranted(String id, AuthorizationUser subject, List<String> actions,
+			AuthorizationUser entity, ResourceDocument resource,
 			List<String> childAuths) {
-		super(id, subject, action, entity, resource);
+		super(id, subject, actions, entity, resource);
 		this.childAuths = childAuths;
 	}
 

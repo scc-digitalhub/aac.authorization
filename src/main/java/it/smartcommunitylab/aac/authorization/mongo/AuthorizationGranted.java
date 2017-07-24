@@ -1,6 +1,9 @@
 package it.smartcommunitylab.aac.authorization.mongo;
 
+import java.util.List;
+
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
@@ -9,7 +12,10 @@ import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
 abstract class AuthorizationGranted {
 	private String id;
 	private AuthorizationUser subject;
-	private String action;
+
+	// to maintain compatibility with previous field name
+	@Field(value = "action")
+	private List<String> actions;
 	private AuthorizationUser entity;
 	private ResourceDocument resource;
 
@@ -17,7 +23,7 @@ abstract class AuthorizationGranted {
 		if (auth != null) {
 			id = auth.getId();
 			subject = auth.getSubject();
-			action = auth.getAction();
+			actions = auth.getActions();
 			entity = auth.getEntity();
 			resource = new ResourceDocument(auth.getResource());
 		}
@@ -26,16 +32,17 @@ abstract class AuthorizationGranted {
 	/*
 	 * Constructor used by Spring data to convert mongo dbobject in class instance
 	 */
-	protected AuthorizationGranted(String id, AuthorizationUser subject, String action, AuthorizationUser entity, ResourceDocument resource) {
+	protected AuthorizationGranted(String id, AuthorizationUser subject, List<String> actions, AuthorizationUser entity,
+			ResourceDocument resource) {
 		this.id = id;
 		this.subject = subject;
-		this.action = action;
+		this.actions = actions;
 		this.entity = entity;
 		this.resource = resource;
 	}
 
 	public Authorization toAuthorization() {
-		return new Authorization(id, subject, action, resource.toResource(), entity);
+		return new Authorization(id, subject, actions, resource.toResource(), entity);
 	}
 
 	public abstract boolean isChildAuth();
@@ -48,8 +55,8 @@ abstract class AuthorizationGranted {
 		return subject;
 	}
 
-	public String getAction() {
-		return action;
+	public List<String> getActions() {
+		return actions;
 	}
 
 	public AuthorizationUser getEntity() {
