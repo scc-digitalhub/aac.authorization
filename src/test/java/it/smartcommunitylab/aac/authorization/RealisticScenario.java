@@ -35,6 +35,7 @@ import it.smartcommunitylab.aac.authorization.model.FQname;
 import it.smartcommunitylab.aac.authorization.model.RequestedAuthorization;
 import it.smartcommunitylab.aac.authorization.model.Resource;
 import it.smartcommunitylab.aac.authorization.mongo.MongoAuthorizationStorage;
+import it.smartcommunitylab.aac.authorization.utils.JsonFileUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { MongoConfig.class,
@@ -278,8 +279,8 @@ public class RealisticScenario {
 	}
 
 	private void setupCompatibilityTest() {
-		BasicDBObject auth = new BasicDBObject(jsonToMap(Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream("authorizationSamples/compatibility.json")));
+		BasicDBObject auth = new BasicDBObject(
+				JsonFileUtils.jsonResourceFileToMap("authorizationSamples/compatibility.json"));
 
 		mongo.getCollection("authorizationGranted").insert(auth);
 		
