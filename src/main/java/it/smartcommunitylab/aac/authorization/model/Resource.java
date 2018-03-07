@@ -1,8 +1,11 @@
 package it.smartcommunitylab.aac.authorization.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -28,15 +31,13 @@ public class Resource {
 
 	public boolean isInstanceOf(AuthorizationNode node) {
 		return fqnameRef.equals(node.getFqname()) && checkLogicalEquivalence(node.getParameters(), values);
+
 	}
 
 	private boolean checkLogicalEquivalence(List<AuthorizationNodeParam> s1, List<AuthorizationNodeValue> s2) {
-		for (AuthorizationNodeValue nv : s2) {
-			if (!s1.contains(nv.getDefinition())) {
-				return false;
-			}
-		}
-		return true;
+		Collection<AuthorizationNodeParam> definitions = s2.stream().map(nodeValue -> nodeValue.getDefinition())
+				.collect(Collectors.toList());
+		return CollectionUtils.isEqualCollection(s1, definitions);
 	}
 
 	public FQname getFqnameRef() {
