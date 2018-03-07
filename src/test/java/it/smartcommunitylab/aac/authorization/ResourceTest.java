@@ -44,13 +44,13 @@ public class ResourceTest {
 	}
 
 	@Test
-	public void validParamListSubSetThatNodeOne() {
+	public void invalidParamListSubSetThatNodeOne() {
 		Resource r = new Resource(new FQname("domain", "a"),
 				Arrays.asList(new AuthorizationNodeValue("a", "b1", "b_value")));
 		AuthorizationNode a = new AuthorizationNode(new FQname("domain", "a"));
 		a.addParameter("a1");
 		a.addParameter("b1");
-		Assert.assertEquals(true, r.isInstanceOf(a));
+		Assert.assertEquals(false, r.isInstanceOf(a));
 	}
 
 	@Test

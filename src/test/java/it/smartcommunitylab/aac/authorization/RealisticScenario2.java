@@ -1,6 +1,8 @@
 package it.smartcommunitylab.aac.authorization;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,6 +21,7 @@ import com.google.common.io.Files;
 import it.smartcommunitylab.aac.authorization.config.MongoConfig;
 import it.smartcommunitylab.aac.authorization.model.AccountAttribute;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
+import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExist;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeValue;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationUser;
 import it.smartcommunitylab.aac.authorization.model.FQname;
@@ -86,8 +89,76 @@ public class RealisticScenario2 {
 
 		requested = new RequestedAuthorization("ALL", resource2, entity);
 		Assert.assertEquals(false, authHelper.validate(requested));
+	}
 
+	@Test
+	public void scenarioMultipleAttributeInNode()
+			throws IOException, URISyntaxException, AuthorizationNodeAlreadyExist {
+		String jsonSchemaContent = Files.asCharSource(new File(Thread.currentThread().getContextClassLoader()
+				.getResource("authorizationSamples/oneNodeMultipleAttribute_schema.json").toURI()), Charsets.UTF_8)
+				.read();
+		schemaHelper.loadJson(jsonSchemaContent);
 
+		AccountAttribute account1 = new AccountAttribute("google+", "fiscal_code", "XXX");
+		AuthorizationUser sub = new AuthorizationUser(account1, "user");
+
+		AccountAttribute account2 = new AccountAttribute("google+", "fiscal_code", "YYY");
+		AuthorizationUser entity = new AuthorizationUser(account2, "user");
+
+		Resource resource = new Resource(new FQname("climb", "pedibus"));
+		resource.addNodeValue(new AuthorizationNodeValue("pedibus", "ownerId", "TEST"));
+		resource.addNodeValue(new AuthorizationNodeValue("pedibus", "resource", "Institute"));
+		Authorization auth = new Authorization(sub, "READ", resource, entity);
+		try {
+			authHelper.insert(auth);
+		} catch (NotValidResourceException e) {
+			Assert.assertTrue("Resource not defined all value for relative node params", true);
+		}
+
+		RequestedAuthorization requested = new RequestedAuthorization("READ", resource, entity);
+
+		Assert.assertEquals(false, authHelper.validate(requested));
+
+		Resource resource1 = new Resource(new FQname("climb", "pedibus"));
+		resource.addNodeValue(new AuthorizationNodeValue("pedibus", "ownerId", "TEST"));
+		resource.addNodeValue(new AuthorizationNodeValue("pedibus", "resource", "Institute"));
+		resource.addNodeValue(new AuthorizationNodeValue("pedibus", "instituteId", AuthorizationNodeValue.ALL_VALUE));
+		resource.addNodeValue(new AuthorizationNodeValue("pedibus", "schoolId", AuthorizationNodeValue.ALL_VALUE));
+		resource.addNodeValue(new AuthorizationNodeValue("pedibus", "routeId", AuthorizationNodeValue.ALL_VALUE));
+		resource.addNodeValue(new AuthorizationNodeValue("pedibus", "gameId", AuthorizationNodeValue.ALL_VALUE));
+
+		RequestedAuthorization requested1 = new RequestedAuthorization("READ", resource1, entity);
+
+		Assert.assertEquals(false, authHelper.validate(requested1));
+
+	}
+
+	@Test
+	public void authorizationMustContainsAllNodeAttributes()
+			throws AuthorizationNodeAlreadyExist, IOException, URISyntaxException {
+		String jsonSchemaContent = Files.asCharSource(
+				new File(Thread.currentThread().getContextClassLoader()
+						.getResource("authorizationSamples/oneNodeMultipleAttribute_schema.json").toURI()),
+				Charsets.UTF_8).read();
+		schemaHelper.loadJson(jsonSchemaContent);
+
+		AccountAttribute account1 = new AccountAttribute("google+", "fiscal_code", "XXX");
+		AuthorizationUser sub = new AuthorizationUser(account1, "user");
+
+		AccountAttribute account2 = new AccountAttribute("google+", "fiscal_code", "YYY");
+		AuthorizationUser entity = new AuthorizationUser(account2, "user");
+
+		Resource resource = new Resource(new FQname("climb", "pedibus"));
+		resource.addNodeValue(new AuthorizationNodeValue("pedibus", "ownerId", "TEST"));
+		resource.addNodeValue(new AuthorizationNodeValue("pedibus", "resource", "Institute"));
+		Authorization auth = new Authorization(sub, "READ", resource, entity);
+		try {
+			authHelper.insert(auth);
+		} catch (NotValidResourceException e) {
+			Assert.assertTrue(true);
+			return;
+		}
+		Assert.fail("NotValidResourceException not thrown");
 
 	}
 
