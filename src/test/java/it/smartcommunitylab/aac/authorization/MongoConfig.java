@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package it.smartcommunitylab.aac.authorization.config;
+package it.smartcommunitylab.aac.authorization;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

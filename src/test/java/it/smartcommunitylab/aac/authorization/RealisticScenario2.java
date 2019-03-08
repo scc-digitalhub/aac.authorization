@@ -18,7 +18,6 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
-import it.smartcommunitylab.aac.authorization.config.MongoConfig;
 import it.smartcommunitylab.aac.authorization.model.AccountAttribute;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExist;

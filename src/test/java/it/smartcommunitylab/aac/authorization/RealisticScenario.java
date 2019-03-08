@@ -24,7 +24,6 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.mongodb.BasicDBObject;
 
-import it.smartcommunitylab.aac.authorization.config.MongoConfig;
 import it.smartcommunitylab.aac.authorization.model.AccountAttribute;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;

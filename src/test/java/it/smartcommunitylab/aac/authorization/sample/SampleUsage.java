@@ -9,9 +9,9 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import it.smartcommunitylab.aac.authorization.AuthorizationHelper;
 import it.smartcommunitylab.aac.authorization.AuthorizationHelperImpl;
 import it.smartcommunitylab.aac.authorization.AuthorizationSchemaHelper;
+import it.smartcommunitylab.aac.authorization.MongoConfig;
 import it.smartcommunitylab.aac.authorization.NotValidResourceException;
 import it.smartcommunitylab.aac.authorization.config.Config;
-import it.smartcommunitylab.aac.authorization.config.MongoConfig;
 import it.smartcommunitylab.aac.authorization.model.AccountAttribute;
 import it.smartcommunitylab.aac.authorization.model.Authorization;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;

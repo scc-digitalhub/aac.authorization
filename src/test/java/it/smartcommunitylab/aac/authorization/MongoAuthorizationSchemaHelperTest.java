@@ -23,7 +23,6 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import com.google.common.io.CharStreams;
 
-import it.smartcommunitylab.aac.authorization.config.MongoConfig;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNode;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeAlreadyExist;
 import it.smartcommunitylab.aac.authorization.model.AuthorizationNodeParam;
